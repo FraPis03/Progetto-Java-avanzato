@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="200.0" layoutY="41.0" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button minHeight="75.0" minWidth="150.0" mnemonicParsing="false" text="Gioca">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Button>
+            <Label text="Seleziona difficoltà" />
+            <ChoiceBox prefWidth="150.0" />
+            <Button mnemonicParsing="false" text="Storico risultati" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

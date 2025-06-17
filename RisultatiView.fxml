@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <TableView layoutX="25.0" layoutY="65.0" prefHeight="248.0" prefWidth="550.0" AnchorPane.leftAnchor="25.0">
+        <columns>
+          <TableColumn maxWidth="200.0" prefWidth="200.0" text="Utente" />
+          <TableColumn maxWidth="150.0" prefWidth="150.0" text="Punteggio" />
+            <TableColumn maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Data e ora" />
+        </columns>
+      </TableView>
+      <Label layoutX="221.0" layoutY="14.0" text="Storico risultati">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="208.0" layoutY="338.0" mnemonicParsing="false" text="Torna al menù principale" />
+   </children>
+</AnchorPane>
