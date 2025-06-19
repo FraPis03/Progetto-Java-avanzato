@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <Label layoutX="177.0" layoutY="14.0" text="Pannello admin">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Separator layoutX="288.0" layoutY="67.0" orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
+      <Button layoutX="28.0" layoutY="25.0" mnemonicParsing="false" text="Indietro" />
+      <StackPane layoutX="46.0" layoutY="126.0" prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="+Trascina qui il file" />
+         </children>
+      </StackPane>
+      <Label layoutX="88.0" layoutY="85.0" text="Upload file">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="121.0" layoutY="289.0" text="Oppure" />
+      <Button layoutX="97.0" layoutY="342.0" mnemonicParsing="false" text="Sfoglia file..." />
+      <Label layoutX="392.0" layoutY="85.0" text="StopWords">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea layoutX="330.0" layoutY="176.0" prefHeight="166.0" prefWidth="247.0" text="&#10;" wrapText="true" />
+      <Text layoutX="352.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserire le parole da bloccare, separate da una virgola" textAlignment="CENTER" wrappingWidth="200.0" />
+      <Button disable="true" layoutX="524.0" layoutY="342.0" mnemonicParsing="false" text="Salva" />
+   </children>
+</AnchorPane>
