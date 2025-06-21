@@ -1,0 +1,156 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package wordageddon;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+/**
+ * FXML Controller class
+ *
+ * @author antoniobellofatto
+ */
+public class AdminController implements Initializable {
+    
+    UtenteJDBC u;
+    
+    AmministratoreJDBC adminDB;
+    
+    Amministratore admin;
+
+    @FXML
+    private Label titoloLabel;
+    @FXML
+    private Separator separatoreCentrale;
+    @FXML
+    private Button bottoneIndietro;
+    @FXML
+    private StackPane areaTrascinamento;
+    @FXML
+    private Text testoTrascina;
+    @FXML
+    private Label etichettaUpload;
+    @FXML
+    private Label etichettaOppure;
+    @FXML
+    private Button bottoneSfoglia;
+    @FXML
+    private Label etichettaStopwords;
+    @FXML
+    private TextArea areaStopWords;
+    @FXML
+    private Text testoIstruzioni;
+    @FXML
+    private Button bottoneAggiungiStopword;
+
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+       u=new UtenteJDBC(); 
+       adminDB=new AmministratoreJDBC(); 
+       
+       bottoneSfoglia.setOnAction(e -> {
+        apriFileChooser();
+    });
+       
+       bottoneIndietro.setOnAction(e -> {
+           try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) bottoneIndietro.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Accesso - Wordageddon");
+        stage.show();
+    } catch (IOException ex) {
+        ex.printStackTrace();
+    }
+       });
+       
+       bottoneAggiungiStopword.setOnAction(e -> {
+        List<String> stopWordsList=new ArrayList<>();   
+        String testo = areaStopWords.getText();
+        if (testo != null && !testo.isEmpty()) {
+            // Divido le parole per virgola e le pulisco da spazi bianchi
+            stopWordsList.addAll(
+           Arrays.stream(testo.split(","))
+          .map(String::trim)
+          .filter(p -> !p.isEmpty() && !stopWordsList.contains(p))
+          .collect(Collectors.toList())
+);
+            adminDB.updateStopWords(admin,stopWordsList );
+            areaStopWords.clear();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("StopWords caricate");
+        alert.setHeaderText(null);
+        alert.setContentText("Le StopWords sono state caricate con successo nel database");
+        alert.showAndWait();
+        }
+    });
+    }
+
+    private void apriFileChooser() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Seleziona un file di testo");
+
+    // Limita ai soli file .txt
+    FileChooser.ExtensionFilter filtroTxt = new FileChooser.ExtensionFilter("File di testo (*.txt)", "*.txt");
+    fileChooser.getExtensionFilters().add(filtroTxt);
+
+    // Ottieni lo stage attuale (assumendo che il bottone sia già visibile in scena)
+    Stage stage = (Stage) bottoneSfoglia.getScene().getWindow();
+
+    // Mostra la finestra di dialogo per la selezione del file
+    File fileSelezionato = fileChooser.showOpenDialog(stage);
+
+    if (fileSelezionato != null) {
+        if(admin.checkFile(fileSelezionato)){
+        admin.addFiles(fileSelezionato);
+        adminDB.memorizzaFile(admin, fileSelezionato);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("File caricato");
+        alert.setHeaderText(null);
+        alert.setContentText("il file è stato caricato con successo nel database");
+        alert.showAndWait();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore File");
+        alert.setHeaderText(null);
+        alert.setContentText("Il file deve avere più di 50 parole\nle parole devono avere almeno 4 freuqenze diverse "
+                + "con frequenza maggiore di uno");
+        alert.showAndWait();
+        }
+    }
+}
+    
+    public void setAmministratore(Utente u){
+        admin=new Amministratore(u.getNomeUtente(),u.getPassword(),u.getEmail());
+    }
+    
+}

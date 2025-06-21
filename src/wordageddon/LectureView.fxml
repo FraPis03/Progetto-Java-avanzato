@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0"
+            xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+            fx:controller="wordageddon.LectureViewController">
+   <children>
+      <VBox fx:id="contenitoreVBox" alignment="CENTER" layoutX="118.0" layoutY="46.0"
+            prefHeight="400.0" prefWidth="600.0" spacing="20.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="labelTempo" text="Tempo rimanente:">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <ScrollPane fx:id="scrollPaneTesto" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
+               <content>
+                  <Text fx:id="testoContenuto" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="540.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

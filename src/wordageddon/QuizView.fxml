@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wordageddon.QuizViewController">
+   <children>
+      <VBox fx:id="vboxDomanda" alignment="CENTER" layoutX="253.0" layoutY="14.0" prefHeight="204.0" prefWidth="600.0" AnchorPane.bottomAnchor="182.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <ScrollPane fx:id="scrollPaneDomanda" prefViewportHeight="212.0" prefViewportWidth="550.0">
+               <content>
+                  <Text fx:id="textDomanda" layoutX="253.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Domanda" textAlignment="CENTER" wrappingWidth="596.0">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+      <Button fx:id="btnRisposta1" layoutX="38.0" layoutY="248.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 1" AnchorPane.leftAnchor="50.0" />
+      <Button fx:id="btnRisposta2" layoutX="343.0" layoutY="248.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 2" AnchorPane.rightAnchor="50.0" />
+      <Button fx:id="btnRisposta3" layoutX="38.0" layoutY="318.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 3" AnchorPane.leftAnchor="50.0" />
+      <Button fx:id="btnRisposta4" layoutX="343.0" layoutY="318.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 4" AnchorPane.rightAnchor="50.0" />
+   </children>
+</AnchorPane>
