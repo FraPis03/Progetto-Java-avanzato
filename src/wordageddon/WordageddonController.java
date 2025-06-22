@@ -162,9 +162,10 @@ public class WordageddonController implements Initializable {
         });
         
         bottoneConfermaRegistrazione.setOnAction(e->{
-    Utente user=new Utente(campoUsernameRegistrazione.getText(),campoPasswordRegistrazione.getText(),campoEmailRegistrazione.getText());
-    if(user.checkUtente()){       
-        if (u.inserisciUtente(user)) {
+            if(campoPasswordRegistrazione.getText().contentEquals(campoConfermaPasswordRegistrazione.getText())){
+            Utente user=new Utente(campoUsernameRegistrazione.getText(),campoPasswordRegistrazione.getText(),campoEmailRegistrazione.getText());
+            if(user.checkUtente()){       
+            if (u.inserisciUtente(user)) {
             try {
             //Cambio la schermata se l'inserimento va a buon fine
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
@@ -192,6 +193,14 @@ public class WordageddonController implements Initializable {
         alert.setTitle("Errore nell inserimento");
         alert.setHeaderText(null);
         alert.setContentText("Username deve avere i caratteri compresi tra 3 e 20\nPassword deve avere i caratteri compresi tra 5 e 20\nEmail deve avere @ e .\n");
+        alert.showAndWait();
+    }
+            }
+            else{
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore nell inserimento");
+        alert.setHeaderText(null);
+        alert.setContentText("Le password non combaciano");
         alert.showAndWait();
     }
         });

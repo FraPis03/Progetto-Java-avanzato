@@ -8,12 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="wordageddon.RisultatiController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="120.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="120.0" layoutY="14.0" text="Punteggio: 9999!">
+            <Label fx:id="labelPunteggio" layoutX="120.0" layoutY="14.0" text="Punteggio: 9999!">
                <font>
                   <Font size="48.0" />
                </font>
@@ -26,14 +25,14 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Label>
-            <TableView maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableErrori" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                <TableColumn maxWidth="100.0" prefWidth="100.0" text="N. domanda" />
-                <TableColumn maxWidth="225.0" minWidth="4.0" prefWidth="225.0" text="Risposta inserita" />
-                  <TableColumn maxWidth="225.0" prefWidth="225.0" text="Risposta corretta" />
+                <TableColumn fx:id="colNumeroDomanda" maxWidth="100.0" prefWidth="100.0" text="N. domanda" />
+                <TableColumn fx:id="colRispostaUtente" maxWidth="225.0" minWidth="4.0" prefWidth="225.0" text="Risposta inserita" />
+                <TableColumn fx:id="colRispostaCorretta" maxWidth="225.0" prefWidth="225.0" text="Risposta corretta" />
               </columns>
             </TableView>
-            <Button mnemonicParsing="false" text="Ritorna al menù">
+            <Button fx:id="btnTornaMenu" mnemonicParsing="false" text="Ritorna al menù">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>

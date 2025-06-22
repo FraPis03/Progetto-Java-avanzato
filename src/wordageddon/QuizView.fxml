@@ -26,5 +26,8 @@
       <Button fx:id="btnRisposta2" layoutX="343.0" layoutY="248.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 2" AnchorPane.rightAnchor="50.0" />
       <Button fx:id="btnRisposta3" layoutX="38.0" layoutY="318.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 3" AnchorPane.leftAnchor="50.0" />
       <Button fx:id="btnRisposta4" layoutX="343.0" layoutY="318.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="225.0" text="Risposta 4" AnchorPane.rightAnchor="50.0" />
+   
+      <Label fx:id="labelProgresso" layoutX="550.0" layoutY="375.0" text="1/5" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0" />
+      
    </children>
 </AnchorPane>
