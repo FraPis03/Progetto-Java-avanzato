@@ -6,11 +6,16 @@
 package wordageddon;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,6 +36,8 @@ import javafx.stage.Stage;
 public class QuizViewController implements Initializable {
     
     Domande domande;
+    
+    private int numeroDomanda;
     
     List<List<String>> domandeFatte;
     
@@ -81,21 +88,14 @@ public class QuizViewController implements Initializable {
             
             if(domandaCorrente==totaleDomande) this.vaiAiRisultati();
             
-            List<String> domanda=domande.generateMassimoSingolo(2);
-            domandeFatte.add(domanda);
-            risposteCorrette.add(domanda.get(4));
-            textDomanda.setText("Qual è la parola che compare nel 2 documento?");
-            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
-            Collections.shuffle(risposte); 
+            
+            textDomanda.setText(domandeFatte.get(domandaCorrente).get(4));
     
-            btnRisposta1.setText(risposte.get(0));
-            btnRisposta2.setText(risposte.get(1));
-            btnRisposta3.setText(risposte.get(2));
-            btnRisposta4.setText(risposte.get(3));
-            
-            
-            
-            
+            btnRisposta1.setText(domandeFatte.get(domandaCorrente).get(0));
+            btnRisposta2.setText(domandeFatte.get(domandaCorrente).get(1));
+            btnRisposta3.setText(domandeFatte.get(domandaCorrente).get(2));
+            btnRisposta4.setText(domandeFatte.get(domandaCorrente).get(3));
+
             domandaCorrente++;
             this.aggiornaProgresso(domandaCorrente, totaleDomande);
         });
@@ -105,19 +105,15 @@ public class QuizViewController implements Initializable {
             risposteUtente.add(btnRisposta2.getText());
             
             if(domandaCorrente==totaleDomande) this.vaiAiRisultati();
-            List<String> domanda=domande.generateConfrontoAssoluto();
-            domandeFatte.add(domanda);
-            risposteCorrette.add(domanda.get(4));
-            textDomanda.setText("Qual è la parola che compare più volte tra tutti i documenti ?");
-            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
-            Collections.shuffle(risposte); 
+            
+            
+            textDomanda.setText(domandeFatte.get(domandaCorrente).get(4));
     
-            btnRisposta1.setText(risposte.get(0));
-            btnRisposta2.setText(risposte.get(1));
-            btnRisposta3.setText(risposte.get(2));
-            btnRisposta4.setText(risposte.get(3));
-            
-            
+            btnRisposta1.setText(domandeFatte.get(domandaCorrente).get(0));
+            btnRisposta2.setText(domandeFatte.get(domandaCorrente).get(1));
+            btnRisposta3.setText(domandeFatte.get(domandaCorrente).get(2));
+            btnRisposta4.setText(domandeFatte.get(domandaCorrente).get(3));
+
             domandaCorrente++;
             this.aggiornaProgresso(domandaCorrente, totaleDomande);
         });
@@ -127,21 +123,15 @@ public class QuizViewController implements Initializable {
             risposteUtente.add(btnRisposta3.getText());
             
             if(domandaCorrente==totaleDomande) this.vaiAiRisultati();
-            List<String> domanda=domande.generateFrequenzaSingolo();
-            domandeFatte.add(domanda);
-            risposteCorrette.add(domanda.get(4));
-            textDomanda.setText("Quante volte compare la parola "+domanda.get(4) +" nel documento "+domanda.get(5));
-            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
-            Collections.shuffle(risposte); 
+            
+            
+            textDomanda.setText(domandeFatte.get(domandaCorrente).get(4));
     
-            btnRisposta1.setText(risposte.get(0));
-            btnRisposta2.setText(risposte.get(1));
-            btnRisposta3.setText(risposte.get(2));
-            btnRisposta4.setText(risposte.get(3));
-            
-            
-            
-            
+            btnRisposta1.setText(domandeFatte.get(domandaCorrente).get(0));
+            btnRisposta2.setText(domandeFatte.get(domandaCorrente).get(1));
+            btnRisposta3.setText(domandeFatte.get(domandaCorrente).get(2));
+            btnRisposta4.setText(domandeFatte.get(domandaCorrente).get(3));
+
             domandaCorrente++;
             this.aggiornaProgresso(domandaCorrente, totaleDomande);
         });
@@ -150,23 +140,18 @@ public class QuizViewController implements Initializable {
             risposteUtente.add(btnRisposta4.getText());
             
             if(domandaCorrente==totaleDomande) this.vaiAiRisultati();
-            List<String> domanda=domande.generateFrequenzaAssoluto();
-            domandeFatte.add(domanda);
-            risposteCorrette.add(domanda.get(4));
-            textDomanda.setText("Quante volte compare la parola "+domanda.get(4) +" tra tutti i documenti ?");
-            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
-            Collections.shuffle(risposte); 
+            
+            
+            textDomanda.setText(domandeFatte.get(domandaCorrente).get(4));
     
-            btnRisposta1.setText(risposte.get(0));
-            btnRisposta2.setText(risposte.get(1));
-            btnRisposta3.setText(risposte.get(2));
-            btnRisposta4.setText(risposte.get(3));
-            
-            
+            btnRisposta1.setText(domandeFatte.get(domandaCorrente).get(0));
+            btnRisposta2.setText(domandeFatte.get(domandaCorrente).get(1));
+            btnRisposta3.setText(domandeFatte.get(domandaCorrente).get(2));
+            btnRisposta4.setText(domandeFatte.get(domandaCorrente).get(3));
 
             domandaCorrente++;
             this.aggiornaProgresso(domandaCorrente, totaleDomande);
-        });
+        });   
     }    
     
     
@@ -175,13 +160,19 @@ public class QuizViewController implements Initializable {
         this.domande=d;
         
         List<String> domanda=domande.generateConfrontoDocumentoSingolo();
-        risposteCorrette.add(domanda.get(4));
-        domandeFatte.add(domanda);
-        textDomanda.setText("Qual è la parola che compare più volte nel documento "+domanda.get(5));
-        btnRisposta1.setText(domanda.get(0));
-        btnRisposta2.setText(domanda.get(1));
-        btnRisposta3.setText(domanda.get(2));
-        btnRisposta4.setText(domanda.get(3));
+            risposteCorrette.add(domanda.get(4));
+            String dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            List<String> risposte = domanda.subList(0, 4); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+        textDomanda.setText(dom);
+        btnRisposta1.setText(risposte.get(0));
+        btnRisposta2.setText(risposte.get(1));
+        btnRisposta3.setText(risposte.get(2));
+        btnRisposta4.setText(risposte.get(3));
+        
+        this.generaDomandeFacile();
        
     }
     
@@ -190,6 +181,7 @@ public class QuizViewController implements Initializable {
     }
     
     public void vaiAiRisultati(){
+        
         try {
             //Cambio la schermata quando sono finite le domande
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RisultatoView.fxml"));
@@ -206,5 +198,57 @@ public class QuizViewController implements Initializable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public void generaDomandeFacile(){
+            List<String> domanda=domande.generateFrequenzaAssoluto();
+            risposteCorrette.add(domanda.get(0));
+            String dom="Quante volte compare la parola "+domanda.get(4) +" tra tutti i documenti ?";
+            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+            
+            domanda=domande.generateFrequenzaSingolo();
+            risposteCorrette.add(domanda.get(0));
+            dom="Quante volte compare la parola "+domanda.get(4) +" nel documento "+domanda.get(5)+" ?";
+            risposte = domanda.subList(0, 4); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+            
+            domanda=domande.generateMassimoSingolo(new Random().nextInt(3));//sistemare
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            risposte = domanda.subList(0, 4); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+            
+            domanda=domande.generateConfrontoAssoluto();
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte tra tutti i documenti ?";
+            risposte = domanda.subList(0, 4); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+            
+            domanda=domande.generateConfrontoDocumentoSingolo();
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            risposte = domanda.subList(0, 4); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
+                 
+    }
+    
+    public void generaDomandeMedio(){
+        
+        
+    }
+    
+    public void generaDomandeDifficile(){
+        
     }
 }

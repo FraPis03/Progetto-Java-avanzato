@@ -59,6 +59,8 @@ public class LectureViewController implements Initializable {
         List<File> files=adminDB.recuperaFile();
         List<String> stopWords=adminDB.recuperaStopWords();
         
+        System.out.println("le stop word sono: "+stopWords.toString());
+        
         Analisi analisi=new Analisi(files,stopWords);
         
         analisi.createTask();
