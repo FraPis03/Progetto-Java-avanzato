@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -94,16 +96,17 @@ public class AdminController implements Initializable {
        
        //segnalare all amministratore che l aggiunta di stopword potrebbe comportare errori nei file già caricati
        bottoneAggiungiStopword.setOnAction(e -> {
-        List<String> stopWordsList=new ArrayList<>();   
+        List<String> stopWordsList=new ArrayList<>(); 
         String testo = areaStopWords.getText();
         if (testo != null && !testo.isEmpty()) {
             // Divido le parole per virgola e le pulisco da spazi bianchi
             stopWordsList.addAll(
            Arrays.stream(testo.split(","))
           .map(String::trim)
+          .map(parola->parola.toLowerCase())
           .filter(p -> !p.isEmpty() && !stopWordsList.contains(p))
-          .collect(Collectors.toList())
-);
+          .collect(Collectors.toList()));
+            if(this.checkFilesOnUpdate(stopWordsList)){
             adminDB.updateStopWords(admin,stopWordsList);
             areaStopWords.clear();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -111,7 +114,17 @@ public class AdminController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Le StopWords sono state caricate con successo nel database");
         alert.showAndWait();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("File non più validi");
+        alert.setHeaderText(null);
+        alert.setContentText("Le StopWords non sono state caricate nel database poichè il loro caricamento\n"
+                + "comporta errori nei file già inseriti");
+        alert.showAndWait();
+            }
         }
+            
     });
     }
 
@@ -153,6 +166,25 @@ public class AdminController implements Initializable {
     
     public void setAmministratore(Utente u){
         admin=new Amministratore(u.getNomeUtente(),u.getPassword(),u.getEmail());
+    }
+
+    private boolean checkFilesOnUpdate(List<String> stopWordsAgg) {
+        List<File> filesErrati=new ArrayList<>();
+        Set<String> stopWords=new HashSet<>();
+        stopWords.addAll(adminDB.recuperaStopWords());
+        stopWords.addAll(stopWordsAgg);
+        List<String> stop=new ArrayList<>(stopWords);
+        admin.setStopWords(stop);
+        boolean check=true;
+        for(File f:adminDB.recuperaFile()){
+            if(!admin.checkFile(f)){
+                check=false;
+                filesErrati.add(f);
+                System.out.println("il file non risulta più valido: "+f.getName());
+            }
+        }
+        
+        return check;
     }
     
 }

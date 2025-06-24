@@ -269,22 +269,25 @@ public class Domande {
     
        List<Map.Entry<String, Integer>> doc = new ArrayList<>(doc1.entrySet());
        String parolaScelta=doc.get(r.nextInt(20)).getKey();
-       Boolean contain=false;
-       
-       do{
-       for(Entry<String,Map<String,Integer>> m:docs){
-               if(!m.getKey().contentEquals(nomeDoc) && m.getValue().containsKey(parolaScelta)){
-                   parolaScelta=doc.get(r.nextInt(20)).getKey();
-                   contain=true;
-               }
-               else{
-                   contain=false;
-               }
+       boolean contain;
+
+    do {
+       parolaScelta = doc.get(r.nextInt(Math.min(20, doc.size()))).getKey();
+       contain = false;
+
+        for (Entry<String, Map<String, Integer>> m : docs) {
+            if (!m.getKey().equals(nomeDoc) && m.getValue().containsKey(parolaScelta)) {
+               contain = true; // parola trovata in un altro documento
+               break; // esco dal ciclo, scelgo un'altra parola
+            }
         }
-       }while(contain);
+    } while (contain);
        
+       
+       domanda.add(nomeDoc);
        for(Entry<String,Map<String,Integer>> m:docs){
-               domanda.add(m.getKey());
+                if(domanda.size()==4) break;
+               if(!m.getKey().contentEquals(nomeDoc)) domanda.add(m.getKey());
         }
        
        int i=0;

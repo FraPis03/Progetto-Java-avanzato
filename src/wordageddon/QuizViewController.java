@@ -154,31 +154,31 @@ public class QuizViewController implements Initializable {
     
     
     public void domande(Domande d,int difficolta){
-        
-        this.domande=d;
-        
-        switch (difficolta){
-            case 3:{
-                this.primaDomanda();
-                this.generaDomandeFacile();
-                totaleDomande=5;
-                break;
-            }
-            case 5:{
-                this.primaDomanda();
-                this.generaDomandeMedio();
-                totaleDomande=8;
-                break;
-            }
-            case 6:{
-                this.primaDomanda();
-                this.generaDomandeDifficile();
-                totaleDomande=12;
-                break;
-            }
+    
+    this.domande=d;
+    
+    switch (difficolta){
+        case 3:{
+            totaleDomande=5;
+            this.primaDomanda();
+            this.generaDomandeFacile();
+            break;
         }
-         
+        case 5:{
+            totaleDomande=8;
+            this.primaDomanda();
+            this.generaDomandeMedio();
+            break;
+        }
+        case 6:{
+            totaleDomande=12;
+            this.primaDomanda();
+            this.generaDomandeDifficile();
+            break;
+        }
     }
+     
+}
     
     public void aggiornaProgresso(int domandaCorrente, int totaleDomande) {
         labelProgresso.setText(domandaCorrente + "/" + totaleDomande);
@@ -231,6 +231,7 @@ public class QuizViewController implements Initializable {
     }
     
     public void primaDomanda(){
+        this.aggiornaProgresso(domandaCorrente, totaleDomande);
         List<String> domanda=domande.generateConfrontoDocumentoSingolo();
         System.out.println("la prima risposta vale"+domanda.get(4));
             risposteCorrette.add(domanda.get(4));
@@ -255,21 +256,53 @@ public class QuizViewController implements Initializable {
             String dom="In quale documento compare la parola "+domanda.get(4) +" ?";
             this.mischia(domanda, dom);
             
+            domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
+            
             domanda=domande.generateMassimoSingolo(4);
             risposteCorrette.add(domanda.get(4));
             dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
-            this.mischia(domanda, dom);
+            this.mischia(domanda, dom); 
             
+    }
+    
+    
+    //aggiornare correttamente questo metodo
+    public void generaDomandeDifficile(){
+        this.generaDomandeFacile();
+        this.generaDomandeMedio();
+        
+        List<String> domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            String dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
             
             domanda=domande.generateSpecifico();
             risposteCorrette.add(domanda.get(5));
             dom="In quale documento compare la parola "+domanda.get(4) +" ?";
             this.mischia(domanda, dom);
             
+            domanda=domande.generateMassimoSingolo(4);
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            this.mischia(domanda, dom); 
             
-    }
-    
-    public void generaDomandeDifficile(){
+            domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
+            
+            domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
+            
+            domanda=domande.generateMassimoSingolo(4);
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            this.mischia(domanda, dom); 
         
     }
     
