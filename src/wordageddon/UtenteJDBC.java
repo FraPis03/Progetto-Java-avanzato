@@ -33,6 +33,7 @@ public class UtenteJDBC implements UtenteDAO {
     private final String USER = "postgres";
     private final String PASS = "2003";
 
+    //inserisco l utente sul db
     @Override
     public boolean inserisciUtente(Utente u) {
         String query = "INSERT INTO Utente (nome, password, email, ruolo) VALUES (?, ?, ?, ?)";
@@ -57,6 +58,8 @@ public class UtenteJDBC implements UtenteDAO {
         return true;
     }
 
+    
+    //elimino l utente dal db
     @Override
     public void eliminaUtente(Utente u) {
         String query = "DELETE FROM Utente WHERE nome = ?";
@@ -77,6 +80,7 @@ public class UtenteJDBC implements UtenteDAO {
         }
     }
 
+    //aggiorno il punteggio dell utente sul db
     @Override
     public void aggiornaPunteggio(Utente u, int punteggio) {
         String query = "INSERT INTO punteggi VALUES(?,?)";
@@ -98,6 +102,7 @@ public class UtenteJDBC implements UtenteDAO {
         }
     }
 
+    //controllo che le credenziali inserite dall utente all accesso siano valide
     @Override
     public boolean checkCredenziali(String nome, String password) {
         boolean check=false;
@@ -124,6 +129,7 @@ public class UtenteJDBC implements UtenteDAO {
         return check;
     }
 
+    //controllo che non vi siano due nomi utenti uguali
     @Override
     public boolean checkNomeUtente(String nome) {
         boolean check=false;
@@ -148,6 +154,7 @@ public class UtenteJDBC implements UtenteDAO {
         return check;
     }
 
+    //restituisco i punteggi dell utente
     @Override
     public List<Integer> punteggiUtente(String nomeUtente) {
         List<Integer> punteggi=new ArrayList<>();
@@ -176,6 +183,7 @@ public class UtenteJDBC implements UtenteDAO {
         return punteggi;
     }
 
+    //ottengo il punteggio massimo da tutti gli utenti sul db
     @Override
     public Map<String, Integer> punteggiGlobali() {
     Map<String, Integer> punteggi = new HashMap<>();
@@ -208,6 +216,7 @@ public class UtenteJDBC implements UtenteDAO {
         ));
 }
     
+    //prendo il ruolo a partire dal nome utente
     public String getRuolo(String nome){
         String ruolo="Utente";
         

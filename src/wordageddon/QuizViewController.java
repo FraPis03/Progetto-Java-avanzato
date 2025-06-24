@@ -79,8 +79,6 @@ public class QuizViewController implements Initializable {
         risposteCorrette=new ArrayList<>();
         
         domandaCorrente=1;
-        
-        totaleDomande=5;
        
         btnRisposta1.setOnAction(e->{
             
@@ -155,25 +153,31 @@ public class QuizViewController implements Initializable {
     }    
     
     
-    public void domande(Domande d){
+    public void domande(Domande d,int difficolta){
         
         this.domande=d;
         
-        List<String> domanda=domande.generateConfrontoDocumentoSingolo();
-            risposteCorrette.add(domanda.get(4));
-            String dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
-            List<String> risposte = domanda.subList(0, 4); 
-            Collections.shuffle(risposte);
-            risposte.add(dom);
-            domandeFatte.add(risposte);
-        textDomanda.setText(dom);
-        btnRisposta1.setText(risposte.get(0));
-        btnRisposta2.setText(risposte.get(1));
-        btnRisposta3.setText(risposte.get(2));
-        btnRisposta4.setText(risposte.get(3));
-        
-        this.generaDomandeFacile();
-       
+        switch (difficolta){
+            case 3:{
+                this.primaDomanda();
+                this.generaDomandeFacile();
+                totaleDomande=5;
+                break;
+            }
+            case 5:{
+                this.primaDomanda();
+                this.generaDomandeMedio();
+                totaleDomande=8;
+                break;
+            }
+            case 6:{
+                this.primaDomanda();
+                this.generaDomandeDifficile();
+                totaleDomande=12;
+                break;
+            }
+        }
+         
     }
     
     public void aggiornaProgresso(int domandaCorrente, int totaleDomande) {
@@ -181,7 +185,6 @@ public class QuizViewController implements Initializable {
     }
     
     public void vaiAiRisultati(){
-        
         try {
             //Cambio la schermata quando sono finite le domande
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RisultatoView.fxml"));
@@ -204,51 +207,76 @@ public class QuizViewController implements Initializable {
             List<String> domanda=domande.generateFrequenzaAssoluto();
             risposteCorrette.add(domanda.get(0));
             String dom="Quante volte compare la parola "+domanda.get(4) +" tra tutti i documenti ?";
-            List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
-            Collections.shuffle(risposte);
-            risposte.add(dom);
-            domandeFatte.add(risposte);
+            this.mischia(domanda, dom);
             
             domanda=domande.generateFrequenzaSingolo();
             risposteCorrette.add(domanda.get(0));
             dom="Quante volte compare la parola "+domanda.get(4) +" nel documento "+domanda.get(5)+" ?";
-            risposte = domanda.subList(0, 4); 
-            Collections.shuffle(risposte);
-            risposte.add(dom);
-            domandeFatte.add(risposte);
+            this.mischia(domanda, dom);
             
             domanda=domande.generateMassimoSingolo(new Random().nextInt(3));//sistemare
             risposteCorrette.add(domanda.get(4));
             dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
-            risposte = domanda.subList(0, 4); 
-            Collections.shuffle(risposte);
-            risposte.add(dom);
-            domandeFatte.add(risposte);
+            this.mischia(domanda, dom);
             
             domanda=domande.generateConfrontoAssoluto();
             risposteCorrette.add(domanda.get(4));
             dom="Qual è la parola che compare più volte tra tutti i documenti ?";
-            risposte = domanda.subList(0, 4); 
-            Collections.shuffle(risposte);
-            risposte.add(dom);
-            domandeFatte.add(risposte);
+            this.mischia(domanda, dom);
             
             domanda=domande.generateConfrontoDocumentoSingolo();
             risposteCorrette.add(domanda.get(4));
             dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
-            risposte = domanda.subList(0, 4); 
+            this.mischia(domanda, dom);   
+    }
+    
+    public void primaDomanda(){
+        List<String> domanda=domande.generateConfrontoDocumentoSingolo();
+        System.out.println("la prima risposta vale"+domanda.get(4));
+            risposteCorrette.add(domanda.get(4));
+            System.out.println("le risposte corrette dopo la prima sono: "+risposteCorrette);
+            String dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            List<String> risposte = domanda.subList(0, 4); 
             Collections.shuffle(risposte);
             risposte.add(dom);
             domandeFatte.add(risposte);
-                 
+        textDomanda.setText(dom);
+        btnRisposta1.setText(risposte.get(0));
+        btnRisposta2.setText(risposte.get(1));
+        btnRisposta3.setText(risposte.get(2));
+        btnRisposta4.setText(risposte.get(3)); 
     }
     
     public void generaDomandeMedio(){
+        this.generaDomandeFacile();
         
-        
+        List<String> domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            String dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
+            
+            domanda=domande.generateMassimoSingolo(4);
+            risposteCorrette.add(domanda.get(4));
+            dom="Qual è la parola che compare più volte nel documento "+domanda.get(5)+" ?";
+            this.mischia(domanda, dom);
+            
+            
+            domanda=domande.generateSpecifico();
+            risposteCorrette.add(domanda.get(5));
+            dom="In quale documento compare la parola "+domanda.get(4) +" ?";
+            this.mischia(domanda, dom);
+            
+            
     }
     
     public void generaDomandeDifficile(){
         
+    }
+    
+    public void mischia(List<String> domanda,String dom){
+        List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
+            Collections.shuffle(risposte);
+            risposte.add(dom);
+            domandeFatte.add(risposte);
     }
 }

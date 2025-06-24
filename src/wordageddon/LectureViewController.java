@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -38,6 +40,8 @@ public class LectureViewController implements Initializable {
     AmministratoreJDBC adminDB;
     
     Domande d;
+    
+    int difficolta;
 
     @FXML
     private VBox contenitoreVBox;
@@ -54,51 +58,7 @@ public class LectureViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        adminDB=new AmministratoreJDBC();
-        
-        List<File> files=adminDB.recuperaFile();
-        List<String> stopWords=adminDB.recuperaStopWords();
-        
-        System.out.println("le stop word sono: "+stopWords.toString());
-        
-        Analisi analisi=new Analisi(files,stopWords);
-        
-        analisi.createTask();
-        
-        analisi.start();
-        
-        analisi.setOnSucceeded((WorkerStateEvent e)->{
-            Map<String,Map<String, Integer>> result = (Map<String,Map<String, Integer>>) analisi.getValue();
-            d=new Domande(result);
-            System.out.println(result);
-            startCountdownTimer();
-        });
-        
-        analisi.setOnFailed(event -> {
-            Throwable ex = analisi.getException();
-            System.err.println("Errore: " + ex.getMessage());
-            ex.printStackTrace();
-        });
-        
-        StringBuffer sb=new StringBuffer();
-        
-        for(File f:files){
-            sb.append(f.getName()+"\n");
-            try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException ex) {
-              ex.printStackTrace();
-        }
- 
-        sb.append('\n');
-        
-        }
-        
-        testoContenuto.setText(sb.toString());
-        
+       
     }    
     
     private void startCountdownTimer() {
@@ -115,7 +75,7 @@ public class LectureViewController implements Initializable {
                 Parent root = loader.load();
 
                 QuizViewController controller = loader.getController();
-                controller.domande(d);
+                controller.domande(d,difficolta);
 
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) contenitoreVBox.getScene().getWindow();
@@ -129,6 +89,65 @@ public class LectureViewController implements Initializable {
     timeline.play();
 }
 
+   public void difficolta(int difficolta){
+        adminDB=new AmministratoreJDBC();
+        this.difficolta=difficolta;
+        List<File> files1=new ArrayList();
+        
+        List<File> files=adminDB.recuperaFile();
+        List<String> stopWords=adminDB.recuperaStopWords();
+        
+        int numFile=files.size();
+        Random r=new Random();
+        while(files1.size()<difficolta){
+            
+            if(numFile<difficolta) throw new RuntimeException("non sono presenti abbastanza file");
+            
+            File f=files.get(r.nextInt(numFile));
 
+            if(!files1.contains(f)) files1.add(f);
+        }
+        
+        System.out.println("le stop word sono: "+stopWords.toString());
+                
+        Analisi analisi=new Analisi(files1,stopWords);
+        
+        analisi.createTask();
+        
+        analisi.start();
+        
+        analisi.setOnSucceeded((WorkerStateEvent e)->{
+            Map<String,Map<String, Integer>> result = (Map<String,Map<String, Integer>>) analisi.getValue();
+            d=new Domande(result);
+            result.values().stream().forEach(m->System.out.println(m));
+            startCountdownTimer();
+        });
+        
+        analisi.setOnFailed(event -> {
+            Throwable ex = analisi.getException();
+            System.err.println("Errore: " + ex.getMessage());
+            ex.printStackTrace();
+        });
+        
+        StringBuffer sb=new StringBuffer();
+        
+        for(File f:files1){
+            sb.append(f.getName()+"\n");
+            try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException ex) {
+              ex.printStackTrace();
+        }
+ 
+        sb.append('\n');
+        
+        }
+        
+        testoContenuto.setText(sb.toString());
+        
+   }
 
 }

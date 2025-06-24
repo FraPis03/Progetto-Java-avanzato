@@ -30,6 +30,7 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
     private List<File> files;
     private List<String> stopWords;
 
+    //definisco la lista di file da analizzare e la lista di stopwords da escludere
     public Analisi(List<File> files, List<String> stopWords) {
         this.files = files;
         this.stopWords = stopWords.stream()
@@ -37,6 +38,7 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
                                   .collect(Collectors.toList());
     }
 
+    //metodo per restituire una mappa con nome del file e le frequenze delle parole al suo interno
     @Override
     protected Task<Map<String,Map<String, Integer>>> createTask() {
         return new Task<Map<String,Map<String, Integer>>>() {
@@ -49,16 +51,17 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
                 for (File file : files) {
                     try (BufferedReader testo = new BufferedReader(new FileReader(file))) {
                         Map<String, Integer> mappa = testo.lines()
-                                .flatMap(line -> Stream.of(line.split("\\W+")))
-                                .filter(parola -> !parola.isEmpty())
+                                .flatMap(line -> Stream.of(line.split("\\W+")))//faccio la divisione sulla base di tutto ciò 
+                                //che non sono caratteri o numeri
+                                .filter(parola -> !parola.isEmpty())//controllo che la parola non sia vuota
                                 .map(parola -> parola.toLowerCase())
-                                .filter(parola -> !stopWords.contains(parola))
+                                .filter(parola -> !stopWords.contains(parola))//filtro per eliminare le stopwords
                                 .collect(Collectors.toMap(
                                         Function.identity(),
                                         w -> 1,
                                         Integer::sum
-                                ));
-                        // Ordina la mappa per valore decrescente
+                                ));//mappo le parole sulla base di quante volte compaiono
+                        // Ordino lo mappa per valore decrescente
                         Map<String, Integer> ordinata = mappa.entrySet().stream()
                                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                                 .collect(Collectors.toMap(

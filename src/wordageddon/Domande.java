@@ -24,14 +24,21 @@ import java.util.stream.Collectors;
  * @author antoniobellofatto
  */
 // inserire classi per le eccezzioni e vedere dove gestirle
+//classe per la produzione delle domande sui documenti che vengono passati
 public class Domande {
     
-    private Map<String,Map<String,Integer>> documenti;
+    private Map<String,Map<String,Integer>> documenti;//una map con il nome del documento e la map delle parole e
+    //frequenze all'interno del documento
 
     public Domande(Map<String,Map<String, Integer>> documenti) {
         this.documenti = documenti;
     }
 
+    
+    /*
+    vengono selezionate 4 parole casuali con 4 frequenze diverse da un singolo
+    documento casuale tra quelli passati
+    */
     public List<String> generateConfrontoDocumentoSingolo() {
 
     List<String> domandeParole = new ArrayList<>();
@@ -54,20 +61,22 @@ public class Domande {
     }
 
     
-    Map.Entry<String, Integer> prima = listaParole.get(0);
+    Map.Entry<String, Integer> prima = listaParole.get(0);//seleziono la prima parola che so ha la frequenza maggiore
     domande.put(prima.getKey(), prima.getValue());
     domandeParole.add(prima.getKey());
 
     int tentativi = 0;
 
+    //aggiungo altre 3 parole casuali
     while (domandeParole.size() < 4 && tentativi < 50) {
-        Map.Entry<String, Integer> scelta = listaParole.get(r.nextInt(15));
+        Map.Entry<String, Integer> scelta = listaParole.get(r.nextInt(25));
         String parola = scelta.getKey();
         int frequenza = scelta.getValue();
 
         if (!domandeParole.contains(parola) && !domande.containsValue(frequenza)) {
             domande.put(parola, frequenza);
             domandeParole.add(parola);
+            System.out.println("Domanda generata con parole: " + domande);
         }
 
         tentativi++;
@@ -85,6 +94,7 @@ public class Domande {
 }
 
    
+    //seleziono 4 parole casuali scelte tra tutti i documenti che abbiano frequenze diverse
     public List<String> generateConfrontoAssoluto(){
         
         List<String> domandeParole=new ArrayList<>();
@@ -133,6 +143,7 @@ public class Domande {
 
     //Ampliare nel caso in cui ci siano 2 o più parole con la stessa frequenza massima
     // mischiare i risultati poichè la più frequente è sempre al primo posto
+    //scelgo una parola in un documento e restituisco la sua frequenza in quel documento e altre 3 frequenze casuali
     public List<String> generateFrequenzaSingolo(){
         
         List<String> domanda=new ArrayList<>();
@@ -161,6 +172,7 @@ public class Domande {
         return domanda;
     }
     
+    //scelgo una parola tra tutti i documenti e restituisco la frequenza in tutti i documenti e 3 frequenze casuali
     public List<String> generateFrequenzaAssoluto(){
         List<String> domanda=new ArrayList<>();
         
@@ -192,6 +204,7 @@ public class Domande {
         return domanda;
     }
     
+    //restituisco la parola che compare più volte nel documento scelto e altre 3 parole casuali
     public List<String> generateMassimoSingolo(int documento) {
     List<String> domanda = new ArrayList<>();
     Map<String, Integer> domande = new LinkedHashMap<>();
@@ -219,7 +232,7 @@ public class Domande {
     
     int tentativi = 0;
     while (domanda.size() < 4 && tentativi < 50) {
-        int i = r.nextInt(10);
+        int i = r.nextInt(25);
         String parolaCasuale = doc.get(i).getKey();
         int freqCasuale = doc.get(i).getValue();
 
@@ -243,6 +256,7 @@ public class Domande {
 
 
     
+    //seleziono una parola tra i documenti e restituisco il nome del documento in cui compare e altri 3 documenti
     public List<String> generateSpecifico(){
         List<String> domanda=new ArrayList<>();
         
@@ -292,7 +306,7 @@ public class Domande {
         return null;
     }
     
-    
+    //ottengo la parola con la frequenza massima
     public String risultato(Set<Map.Entry<String,Integer>> m){
         int valoreMassimo=0;
         String risultato="";
@@ -305,7 +319,7 @@ public class Domande {
         return risultato;
     }
 
-    
+    //genero 3 frequenza casuali in un range di +- 10 da quella di riferimento
     public List<String> generaFrequenzeCasuali(int frequenzaRiferimento, int numeroFrequenze) {
     Random r = new Random();
     Set<String> frequenze = new HashSet<>();

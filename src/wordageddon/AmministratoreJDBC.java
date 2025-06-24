@@ -29,6 +29,8 @@ public class AmministratoreJDBC implements AmministratoreDAO {
     private final String USER = "postgres";
     private final String PASS = "2003";
 
+    
+    //aggiungo le stopwords passate in input al db
     @Override
     public void updateStopWords(Amministratore admin, List<String> parole) {
         String query = "INSERT INTO AmministratoreStopWords (nome, stopword) VALUES (?, ?)";
@@ -53,6 +55,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         }
     }
 
+    //memorizzo sul db il path del file passato dall admin
     @Override
     public void memorizzaFile(Amministratore admin, File f) {
         String query = "INSERT INTO AmministratoreFile (nome, file) VALUES (?, ?)";
@@ -75,6 +78,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         }
     }
 
+    //recupero i path dei vari file presenti sul db e restituisco una lista di file
     @Override
     public List<File> recuperaFile() {
         
@@ -97,6 +101,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         return files;
     }
 
+    //restituisco tutte le stopwords presenti sul db
     @Override
     public List<String> recuperaStopWords() {
         List<String> stopWords=new ArrayList<>();
@@ -118,6 +123,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         return stopWords;
     }
 
+    //controllo che non vengano inseriti più volte gli stessi file o file con lo stesso nome
     @Override
     public boolean checkNomeFile(String nomeFile) {
         boolean check=false;

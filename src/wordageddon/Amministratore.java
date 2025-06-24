@@ -52,6 +52,8 @@ public class Amministratore extends Utente{
         if(!this.files.contains(f)) this.files.add(f);
     }
     
+    
+    //controllo sui file affinchè abbiano una certa lunghezza e una certa varietà di parole con diverse frequenze al suo interno
     public boolean checkFile(File f){
         
         boolean check=false;
@@ -66,13 +68,28 @@ public class Amministratore extends Utente{
             .filter(parola -> !this.stopWords.contains(parola)).collect(Collectors.toList());
 
         long paroleDiverse = parole.stream().distinct().count();
-
-        long paroleFrequenza = parole.stream()
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-            .values().stream()
-            .filter(count -> count > 1).count();
         
-        check= paroleDiverse>50 && paroleFrequenza>4;
+         Map<String, Long> mappaFrequenze = parole.stream()
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        Set<Long> frequenzeUniche = new HashSet<>();
+
+        for (Long freq : mappaFrequenze.values()) {
+            //if (freq > 1) { decommentare per necessità sui valori di frequenza
+                frequenzeUniche.add(freq);
+            //}
+        }
+        
+        System.out.println("Parole filtrate: " + parole);
+        System.out.println("Mappa delle frequenze:");
+        mappaFrequenze.forEach((parola, frequenza) ->
+            System.out.println(parola + ": " + frequenza)
+        );
+        System.out.println("Parole diverse: " + paroleDiverse);
+        System.out.println("Frequenze diverse: " + frequenzeUniche.size());
+        
+        
+        check= paroleDiverse>50 && paroleDiverse<300 && frequenzeUniche.size()>=4;
         
     } catch (IOException e) {
         e.printStackTrace();
@@ -80,4 +97,10 @@ public class Amministratore extends Utente{
     }
     return check;
     }
+
+    public void setStopWords(List<String> stopWords) {
+        this.stopWords = stopWords;
+    }
+    
+    
 }

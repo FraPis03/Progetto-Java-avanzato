@@ -92,6 +92,7 @@ public class AdminController implements Initializable {
     }
        });
        
+       //segnalare all amministratore che l aggiunta di stopword potrebbe comportare errori nei file già caricati
        bottoneAggiungiStopword.setOnAction(e -> {
         List<String> stopWordsList=new ArrayList<>();   
         String testo = areaStopWords.getText();
@@ -103,7 +104,7 @@ public class AdminController implements Initializable {
           .filter(p -> !p.isEmpty() && !stopWordsList.contains(p))
           .collect(Collectors.toList())
 );
-            adminDB.updateStopWords(admin,stopWordsList );
+            adminDB.updateStopWords(admin,stopWordsList);
             areaStopWords.clear();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("StopWords caricate");
@@ -129,6 +130,7 @@ public class AdminController implements Initializable {
     File fileSelezionato = fileChooser.showOpenDialog(stage);
 
     if (fileSelezionato != null) {
+        admin.setStopWords(adminDB.recuperaStopWords());
         if(admin.checkFile(fileSelezionato)){
         admin.addFiles(fileSelezionato);
         adminDB.memorizzaFile(admin, fileSelezionato);
@@ -142,7 +144,7 @@ public class AdminController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Errore File");
         alert.setHeaderText(null);
-        alert.setContentText("Il file deve avere più di 50 parole\nle parole devono avere almeno 4 freuqenze diverse "
+        alert.setContentText("Il file deve avere più di 50 e meno di 300 parole diverse \nle parole devono avere almeno 4 freuqenze diverse "
                 + "con frequenza maggiore di uno");
         alert.showAndWait();
         }

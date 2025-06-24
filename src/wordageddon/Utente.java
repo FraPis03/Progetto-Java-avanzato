@@ -51,6 +51,7 @@ public class Utente {
         this.email = email;
     }
     
+    //controlli sulla validità dell'utente
     public boolean checkUtente(){
         if(this.nomeUtente.length()<3 || this.nomeUtente.length()>20) return false;
         if(this.password.length()<5 || this.password.length()>20) return false;

@@ -49,12 +49,33 @@ public class MainViewController implements Initializable {
         
         bottoneGioca.setOnAction(e->{
             String difficolta=sceltaDifficolta.getValue();
+            int difficolta1=0;
+            switch (difficolta){
+                case "Facile": {
+                    difficolta1=3;
+                    break;
+                }
+                case "Medio": {
+                    difficolta1=5;
+                    break;
+                }             
+                case "Difficile":{
+                    difficolta1=6;
+                    break;
+                }
+            }
             
             try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LectureView.fxml"));
             Parent root;
             root = loader.load();
+            
+            LectureViewController controller = loader.getController();
+            System.out.println("la difficoltà vale: "+difficolta1);
+            controller.difficolta(difficolta1);
+            
              // Ottieni lo stage corrente
+             
             Stage stage = (Stage) bottoneGioca.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Lecture");
