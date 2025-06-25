@@ -107,31 +107,16 @@ public class AdminController implements Initializable {
           .filter(p -> !p.isEmpty() && !stopWordsList.contains(p))
           .collect(Collectors.toList()));
             if(this.checkFilesOnUpdate(stopWordsList)){
-                if(adminDB.updateStopWords(admin,stopWordsList)){
-                    areaStopWords.clear();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                     alert.setTitle("StopWords caricate");
-                     alert.setHeaderText(null);
-                     alert.setContentText("Le StopWords sono state caricate con successo nel database");
-                    alert.showAndWait();
-                }
-                else{
-                    areaStopWords.clear();
-                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("StopWords errore");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Le StopWords non sono state caricate nel database \n"
-                            + "perchè già presenti al suo interno oopure per un errore di caricamento");
-                    alert.showAndWait();
-            }
+                this.inserisciStopWords(stopWordsList);
             }
             else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("File non più validi");
-        alert.setHeaderText(null);
-        alert.setContentText("Le StopWords non sono state caricate nel database poichè il loro caricamento\n"
-                + "comporta errori nei file già inseriti");
-        alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("File non più validi");
+                alert.setHeaderText(null);
+                alert.setContentText("Le StopWords comportano errori nei file già inseriti\n"
+                        + "Desideri inserirle lo stesso?");
+                alert.showAndWait();
+                if(alert.getResult().getText().contentEquals("OK")) this.inserisciStopWords(stopWordsList);
             }
         }
             
@@ -206,4 +191,23 @@ public class AdminController implements Initializable {
         return check;
     }
     
+    public void inserisciStopWords(List<String> stopWordsList){
+        if(adminDB.updateStopWords(admin,stopWordsList)){
+                    areaStopWords.clear();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                     alert.setTitle("StopWords caricate");
+                     alert.setHeaderText(null);
+                     alert.setContentText("Le StopWords sono state caricate con successo nel database");
+                    alert.showAndWait();
+                }
+                else{
+                    areaStopWords.clear();
+                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("StopWords errore");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Le StopWords non sono state caricate nel database \n"
+                            + "perchè già presenti al suo interno oopure per un errore di caricamento");
+                    alert.showAndWait();
+            }
+    }
 }

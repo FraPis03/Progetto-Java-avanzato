@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -101,7 +102,15 @@ public class LectureViewController implements Initializable {
         Random r=new Random();
         while(files1.size()<difficolta){
             
-            if(numFile<difficolta) throw new RuntimeException("non sono presenti abbastanza file");
+            if(numFile<difficolta){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Numero File Errore");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Non sono presenti abbastanza documenti per giocare a questa difficoltà \n"
+                            + "Attendi aggiornamenti dall'Amministratore");
+                    alert.showAndWait();
+                throw new RuntimeException("non sono presenti abbastanza file");
+            }
             
             File f=files.get(r.nextInt(numFile));
 
