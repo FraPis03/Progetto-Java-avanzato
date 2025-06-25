@@ -107,13 +107,23 @@ public class AdminController implements Initializable {
           .filter(p -> !p.isEmpty() && !stopWordsList.contains(p))
           .collect(Collectors.toList()));
             if(this.checkFilesOnUpdate(stopWordsList)){
-            adminDB.updateStopWords(admin,stopWordsList);
-            areaStopWords.clear();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("StopWords caricate");
-        alert.setHeaderText(null);
-        alert.setContentText("Le StopWords sono state caricate con successo nel database");
-        alert.showAndWait();
+                if(adminDB.updateStopWords(admin,stopWordsList)){
+                    areaStopWords.clear();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                     alert.setTitle("StopWords caricate");
+                     alert.setHeaderText(null);
+                     alert.setContentText("Le StopWords sono state caricate con successo nel database");
+                    alert.showAndWait();
+                }
+                else{
+                    areaStopWords.clear();
+                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("StopWords errore");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Le StopWords non sono state caricate nel database \n"
+                            + "perchè già presenti al suo interno oopure per un errore di caricamento");
+                    alert.showAndWait();
+            }
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -136,7 +146,7 @@ public class AdminController implements Initializable {
     FileChooser.ExtensionFilter filtroTxt = new FileChooser.ExtensionFilter("File di testo (*.txt)", "*.txt");
     fileChooser.getExtensionFilters().add(filtroTxt);
 
-    // Ottieni lo stage attuale (assumendo che il bottone sia già visibile in scena)
+    // Ottieni lo stage attuale
     Stage stage = (Stage) bottoneSfoglia.getScene().getWindow();
 
     // Mostra la finestra di dialogo per la selezione del file
@@ -145,13 +155,22 @@ public class AdminController implements Initializable {
     if (fileSelezionato != null) {
         admin.setStopWords(adminDB.recuperaStopWords());
         if(admin.checkFile(fileSelezionato)){
-        admin.addFiles(fileSelezionato);
-        adminDB.memorizzaFile(admin, fileSelezionato);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("File caricato");
-        alert.setHeaderText(null);
-        alert.setContentText("il file è stato caricato con successo nel database");
-        alert.showAndWait();
+            if(adminDB.memorizzaFile(admin, fileSelezionato)){
+                admin.addFiles(fileSelezionato);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("File caricato");
+                alert.setHeaderText(null);
+                alert.setContentText("il file è stato caricato con successo nel database");
+                alert.showAndWait();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("File errore");
+                alert.setHeaderText(null);
+                alert.setContentText("il File non è stato caricato nel database \n"
+                            + "perchè già presente al suo interno oppure per un errore di caricamento");
+                alert.showAndWait();
+            }
         }
         else{
             Alert alert = new Alert(Alert.AlertType.ERROR);

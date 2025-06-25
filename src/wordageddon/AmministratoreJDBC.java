@@ -32,7 +32,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
     
     //aggiungo le stopwords passate in input al db
     @Override
-    public void updateStopWords(Amministratore admin, List<String> parole) {
+    public boolean updateStopWords(Amministratore admin, List<String> parole) {
         String query = "INSERT INTO AmministratoreStopWords (nome, stopword) VALUES (?, ?)";
 
         try (
@@ -45,19 +45,20 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
             int righe = stm.executeUpdate();
             if (righe == 0) {
-                throw new RuntimeException("Problemi nell'aggiunta delle stopWords.");
+                return false;
             }
          }
 
         } catch (SQLException ex) {
             Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Errore SQL in updateStopWords", ex);
+            return false;
         }
+        return true;
     }
 
     //memorizzo sul db il path del file passato dall admin
     @Override
-    public void memorizzaFile(Amministratore admin, File f) {
+    public boolean memorizzaFile(Amministratore admin, File f) {
         String query = "INSERT INTO AmministratoreFile (nome, file) VALUES (?, ?)";
 
         try (
@@ -69,13 +70,14 @@ public class AmministratoreJDBC implements AmministratoreDAO {
             
             int righe = stm.executeUpdate();
             if (righe == 0) {
-                throw new RuntimeException("Problemi nell'aggiunta del file.");
+                return false;
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Errore SQL in memorizzaFile", ex);
+            return false;
         }
+        return true;
     }
 
     //recupero i path dei vari file presenti sul db e restituisco una lista di file

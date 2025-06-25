@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface AmministratoreDAO {
     
-    public void updateStopWords(Amministratore admin,List<String> parole);
-    public void memorizzaFile(Amministratore admin,File f);
+    public boolean updateStopWords(Amministratore admin,List<String> parole);
+    public boolean memorizzaFile(Amministratore admin,File f);
     public List<File> recuperaFile();
     public List<String> recuperaStopWords();
     public boolean checkNomeFile(String nomeFile);
