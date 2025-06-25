@@ -68,7 +68,7 @@ public class Domande {
     int tentativi = 0;
 
     //aggiungo altre 3 parole casuali
-    while (domandeParole.size() < 4 && tentativi < 50) {
+    while (domandeParole.size() < 4 && tentativi < 150) {
         Map.Entry<String, Integer> scelta = listaParole.get(r.nextInt(25));
         String parola = scelta.getKey();
         int frequenza = scelta.getValue();
@@ -104,7 +104,7 @@ public class Domande {
         int count=0;
         int numeroMassimeIterazioni=0;       
        
-        while(domande.size()<4 && numeroMassimeIterazioni<100){
+        while(domande.size()<4 && numeroMassimeIterazioni<150){
             List<Map.Entry<String,Map<String,Integer>>> doc=new ArrayList<>(this.documenti.entrySet());
             Map.Entry<String,Map<String, Integer>> documentoSelezionato=doc.get(r.nextInt(this.documenti.size()));
             Map<String,Integer> documento=documentoSelezionato.getValue();
@@ -114,7 +114,7 @@ public class Domande {
             String parola=null;
             
            if(documento.size()<10) throw new RuntimeException(" il documento ha troppe poche parole");
-           if(numeroMassimeIterazioni>50) throw new RuntimeException(" problemi con il documento");
+           if(numeroMassimeIterazioni>149) throw new RuntimeException(" problemi con il documento");
            
            if(domandeParole.size()<2) parola=parole.get(r.nextInt(10));
            else parola=parole.get(r.nextInt(parole.size()));
@@ -231,7 +231,7 @@ public class Domande {
 
     
     int tentativi = 0;
-    while (domanda.size() < 4 && tentativi < 50) {
+    while (domanda.size() < 4 && tentativi < 150) {
         int i = r.nextInt(25);
         String parolaCasuale = doc.get(i).getKey();
         int freqCasuale = doc.get(i).getValue();

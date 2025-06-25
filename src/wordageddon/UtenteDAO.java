@@ -21,6 +21,6 @@ public interface UtenteDAO {
     public void aggiornaPunteggio(Utente u,int punteggio);
     public boolean checkCredenziali(String nome,String password);
     public boolean checkNomeUtente(String nome);
-    public List<Integer> punteggiUtente(String nomeUtente);
+    public List<Punteggi> punteggiUtente(String nomeUtente);
     public Map<String,Integer> punteggiGlobali();
 }

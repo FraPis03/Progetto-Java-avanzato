@@ -38,7 +38,7 @@ import javafx.util.Duration;
 public class LectureViewController implements Initializable {
     
     AmministratoreJDBC adminDB;
-    
+       
     Domande d;
     
     int difficolta;

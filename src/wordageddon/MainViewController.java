@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  */
 public class MainViewController implements Initializable {
     
-    Utente user;
+    static Utente user;
 
     @FXML
     private Button bottoneGioca;
@@ -46,6 +46,27 @@ public class MainViewController implements Initializable {
         // TODO
         sceltaDifficolta.getItems().addAll("Facile", "Medio", "Difficile");
         sceltaDifficolta.setValue("Facile");
+        
+        
+        bottoneStorico.setOnAction(e->{
+            try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassificaView.fxml"));
+            Parent root;
+            root = loader.load();
+            
+            ClassificaViewController controller = loader.getController();
+            controller.utenteClassifica();
+            
+             // Ottieni lo stage corrente
+             
+            Stage stage = (Stage) bottoneGioca.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Classifica");
+            stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         bottoneGioca.setOnAction(e->{
             String difficolta=sceltaDifficolta.getValue();
@@ -90,4 +111,7 @@ public class MainViewController implements Initializable {
         user=u;
     }    
     
+    public static Utente getUtente(){
+        return user;
+    }
 }

@@ -7,7 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -83,24 +86,27 @@ public class UtenteJDBC implements UtenteDAO {
     //aggiorno il punteggio dell utente sul db
     @Override
     public void aggiornaPunteggio(Utente u, int punteggio) {
-        String query = "INSERT INTO punteggi VALUES(?,?)";
+    String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra) VALUES (?, ?, ?)";
 
-        try (
-            Connection con = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stmt = con.prepareStatement(query)
-        ) {
-            stmt.setInt(1, punteggio);
-            stmt.setString(2, u.getNomeUtente());
+    try (
+        Connection con = DriverManager.getConnection(URL, USER, PASS);
+        PreparedStatement stmt = con.prepareStatement(query)
+    ) {
+        stmt.setString(1, u.getNomeUtente());
+        stmt.setInt(2, punteggio);
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        stmt.setTimestamp(3, timestamp);
 
-            int rows = stmt.executeUpdate();
-            if (rows == 0) {
-                System.out.println("Nessun punteggio inserito");
-            }
-
-        } catch (SQLException ex) {
-            throw new RuntimeException("Errore inserimento punteggio", ex);
+        int rows = stmt.executeUpdate();
+        if (rows == 0) {
+            System.out.println("Nessun punteggio inserito");
         }
+
+    } catch (SQLException ex) {
+        throw new RuntimeException("Errore inserimento punteggio", ex);
     }
+ }
+
 
     //controllo che le credenziali inserite dall utente all accesso siano valide
     @Override
@@ -156,10 +162,10 @@ public class UtenteJDBC implements UtenteDAO {
 
     //restituisco i punteggi dell utente
     @Override
-    public List<Integer> punteggiUtente(String nomeUtente) {
-        List<Integer> punteggi=new ArrayList<>();
+    public List<Punteggi> punteggiUtente(String nomeUtente) {
+        List<Punteggi> punteggi=new ArrayList<>();
         
-        String query = "SELECT punteggio FROM punteggi WHERE nome=?";
+        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=?";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -169,7 +175,7 @@ public class UtenteJDBC implements UtenteDAO {
             stm.setString(1, nomeUtente);
             try(ResultSet rs=stm.executeQuery()){
             while(rs.next()){
-                punteggi.add(rs.getInt("punteggio"));
+                punteggi.add(new Punteggi(rs.getInt("punteggio"),rs.getTimestamp("dataOra")));  
             }
 
             }
@@ -179,7 +185,6 @@ public class UtenteJDBC implements UtenteDAO {
             throw new RuntimeException("Errore SQL recupera stopword", ex);
         }
         
-        punteggi.sort(Integer::compareTo);
         return punteggi;
     }
 

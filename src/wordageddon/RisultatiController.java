@@ -7,6 +7,7 @@ package wordageddon;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -24,7 +25,11 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class RisultatiController implements Initializable {
+    
+    Utente user;
 
+    UtenteJDBC userDB;
+    
     @FXML
     private Label labelPunteggio;
 
@@ -47,6 +52,7 @@ public class RisultatiController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        userDB=new UtenteJDBC();
         // TODO
         colNumeroDomanda.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(0))
@@ -76,6 +82,7 @@ public class RisultatiController implements Initializable {
     }    
     
     public void setRisultati(List<String> risposteUtente,List<String> risposteCorrette){
+    this.user=MainViewController.getUtente();
     ObservableList<ObservableList<String>> dati = FXCollections.observableArrayList();
     
     for (int i = 0; i < risposteUtente.size(); i++) {
@@ -88,6 +95,7 @@ public class RisultatiController implements Initializable {
 
     tableErrori.setItems(dati);
     labelPunteggio.setText("Punteggio: " + risposteUtente.size());
-
+    int punteggio = 5;
+    userDB.aggiornaPunteggio(user, punteggio);
     }
 }

@@ -153,8 +153,8 @@ public class QuizViewController implements Initializable {
     }    
     
     
-    public void domande(Domande d,int difficolta){
-    
+    public void domande(Domande d,int difficolta){    
+        
     this.domande=d;
     
     switch (difficolta){
