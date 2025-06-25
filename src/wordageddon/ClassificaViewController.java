@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,9 +56,15 @@ public class ClassificaViewController implements Initializable {
     @FXML
     private Button indietroButton;
     @FXML
-    private ChoiceBox<?> tipoClassificaChoiceBox;
+    private ChoiceBox<String> tipoClassificaChoiceBox;
     @FXML
-    private ChoiceBox<?> difficoltaChoiceBox;
+    private ChoiceBox<String> difficoltaChoiceBox;
+    @FXML
+    private TableColumn<ObservableList<String>, String> colDifficolta;
+    @FXML
+    private Label labelMigliorPunteggio;
+    @FXML
+    private Label labelPunteggioMedio;
 
     /**
      * Initializes the controller class.
@@ -66,7 +73,15 @@ public class ClassificaViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         userDB=new UtenteJDBC();
-        
+    tipoClassificaChoiceBox.getItems().addAll("Singolo", "Globale");
+    difficoltaChoiceBox.getItems().addAll("Facile", "Medio", "Difficile");
+
+    tipoClassificaChoiceBox.setOnAction(e -> aggiornaClassifica());
+    difficoltaChoiceBox.setOnAction(e -> aggiornaClassifica());
+
+    tipoClassificaChoiceBox.setValue("Singolo");
+    difficoltaChoiceBox.setValue("Facile");
+    aggiornaClassifica();
         colUtente.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(0))
     );
@@ -75,6 +90,9 @@ public class ClassificaViewController implements Initializable {
     );
     colDataOra.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(2))
+    );
+    colDifficolta.setCellValueFactory(cellData -> 
+        new ReadOnlyStringWrapper(cellData.getValue().get(3))
     );
     
        indietroButton.setOnAction(e->{
@@ -93,14 +111,10 @@ public class ClassificaViewController implements Initializable {
        });
     }   
     
-    public void utenteClassifica(){
+    public void utenteSingoloClassifica(String difficolta){
         this.user=MainViewController.getUtente();
-        
-        System.out.println(user.getNomeUtente());
-        
-        List<Punteggi> punteggiUtente=userDB.punteggiUtente(user.getNomeUtente());
-        
-        System.out.println(punteggiUtente);
+    
+        List<Punteggi> punteggiUtente=userDB.punteggiUtente(user.getNomeUtente(),difficolta);
 
         ObservableList<ObservableList<String>> punteggi=FXCollections.observableArrayList();
 
@@ -108,12 +122,51 @@ public class ClassificaViewController implements Initializable {
         ObservableList<String> riga = FXCollections.observableArrayList();
         riga.add(user.getNomeUtente());            
         riga.add(String.valueOf(punteggiUtente.get(i).getPunteggio()));            
-        riga.add(String.valueOf(punteggiUtente.get(i).getTempo()));          
+        riga.add(String.valueOf(punteggiUtente.get(i).getTempo()));
+        riga.add(difficolta);
         punteggi.add(riga);
     }
         
         classificaTable.setItems(punteggi);
+        this.setStatistiche(difficolta);
 
     }
     
+    public void utenteGlobaleClassifica(String difficolta){
+        this.user=MainViewController.getUtente();
+        
+        Map<String,Punteggi> punteggiGlobali=userDB.punteggiGlobali(difficolta);
+
+        ObservableList<ObservableList<String>> punteggi=FXCollections.observableArrayList();
+
+    for (Map.Entry<String,Punteggi> m:punteggiGlobali.entrySet()) {
+        ObservableList<String> riga = FXCollections.observableArrayList();
+        riga.add(m.getKey());            
+        riga.add(String.valueOf(m.getValue().getPunteggio()));            
+        riga.add(String.valueOf(m.getValue().getTempo()));    
+        riga.add(difficolta);
+        punteggi.add(riga);
+    }
+        
+        classificaTable.setItems(punteggi);
+        this.setStatistiche(difficolta);
+    }
+    
+    private void aggiornaClassifica() {
+    String tipo = tipoClassificaChoiceBox.getValue();
+    String difficolta = difficoltaChoiceBox.getValue();
+
+    if (tipo == null || difficolta == null) return;
+
+    if (tipo.equals("Singolo")) {
+        utenteSingoloClassifica(difficolta);
+    } else if (tipo.equals("Globale")) {
+        utenteGlobaleClassifica(difficolta);
+    }
+}
+    public void setStatistiche(String difficolta){
+        List<Integer> statistiche=userDB.statistichePunteggio(user.getNomeUtente(), difficolta);
+        labelMigliorPunteggio.setText("Miglior punteggio: "+String.valueOf(statistiche.get(0)));
+        labelPunteggioMedio.setText("Media punteggi: "+String.valueOf(statistiche.get(1)));
+    }
 }

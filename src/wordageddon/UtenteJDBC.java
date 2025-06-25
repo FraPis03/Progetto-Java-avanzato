@@ -85,8 +85,8 @@ public class UtenteJDBC implements UtenteDAO {
 
     //aggiorno il punteggio dell utente sul db
     @Override
-    public void aggiornaPunteggio(Utente u, int punteggio) {
-    String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra) VALUES (?, ?, ?)";
+    public void aggiornaPunteggio(Utente u, int punteggio,String difficolta) {
+    String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra, difficolta) VALUES (?, ?, ?, ?)";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -96,6 +96,7 @@ public class UtenteJDBC implements UtenteDAO {
         stmt.setInt(2, punteggio);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
         stmt.setTimestamp(3, timestamp);
+        stmt.setString(4, difficolta);
 
         int rows = stmt.executeUpdate();
         if (rows == 0) {
@@ -162,10 +163,10 @@ public class UtenteJDBC implements UtenteDAO {
 
     //restituisco i punteggi dell utente
     @Override
-    public List<Punteggi> punteggiUtente(String nomeUtente) {
+    public List<Punteggi> punteggiUtente(String nomeUtente,String difficolta) {
         List<Punteggi> punteggi=new ArrayList<>();
         
-        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=?";
+        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=? AND difficolta=?";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -173,6 +174,7 @@ public class UtenteJDBC implements UtenteDAO {
                 
         ) {
             stm.setString(1, nomeUtente);
+            stm.setString(2, difficolta);
             try(ResultSet rs=stm.executeQuery()){
             while(rs.next()){
                 punteggi.add(new Punteggi(rs.getInt("punteggio"),rs.getTimestamp("dataOra")));  
@@ -190,36 +192,44 @@ public class UtenteJDBC implements UtenteDAO {
 
     //ottengo il punteggio massimo da tutti gli utenti sul db
     @Override
-    public Map<String, Integer> punteggiGlobali() {
-    Map<String, Integer> punteggi = new HashMap<>();
-    
-    String query = "SELECT nome, MAX(punteggio) AS max_punteggio FROM punteggi GROUP BY nome";
+public Map<String, Punteggi> punteggiGlobali(String difficolta) {
+    Map<String, Punteggi> punteggi = new HashMap<>();
+
+    String query = "SELECT nomeUtente, MAX(dataOra) AS dataOra, SUM(punteggio) AS sum_punteggio"
+            + " FROM punteggi WHERE difficolta=? GROUP BY nomeUtente";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
         PreparedStatement stm = con.prepareStatement(query);
-        ResultSet rs = stm.executeQuery()
+        
     ) {
+        
+        stm.setString(1, difficolta);
+        try (ResultSet rs = stm.executeQuery()) {
         while (rs.next()) {
-            String nome = rs.getString("nome");
-            int maxPunteggio = rs.getInt("max_punteggio");
-            punteggi.put(nome, maxPunteggio);
+            String nome = rs.getString("nomeUtente");
+            int somma = rs.getInt("sum_punteggio");
+            Timestamp tempo = rs.getTimestamp("dataOra");
+
+            punteggi.put(nome, new Punteggi(somma, tempo));
         }
+    }
     } catch (SQLException ex) {
         Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
         throw new RuntimeException("Errore SQL nel recupero dei punteggi", ex);
     }
 
-    
+    // Ordina la mappa per punteggio in ordine decrescente
     return punteggi.entrySet().stream()
-        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-            .collect(Collectors.toMap(
+        .sorted(Comparator.comparingInt((Map.Entry<String, Punteggi> e) -> e.getValue().getPunteggio()).reversed())
+        .collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
             (e1, e2) -> e1,
             LinkedHashMap::new
         ));
 }
+
     
     //prendo il ruolo a partire dal nome utente
     public String getRuolo(String nome){
@@ -243,6 +253,35 @@ public class UtenteJDBC implements UtenteDAO {
             throw new RuntimeException("Errore SQL recupera stopword", ex);
         }
         return ruolo;
+    }
+
+    @Override
+    public List<Integer> statistichePunteggio(String nomeUtente, String difficolta) {
+        List<Integer> punteggi=new ArrayList<>();
+        
+        String query = "SELECT MAX(punteggio) as maxPunteggio,AVG(punteggio) as mediaPunteggio FROM punteggi WHERE nomeUtente=? AND difficolta=?";
+
+        try (
+            Connection con = DriverManager.getConnection(URL, USER, PASS);
+            PreparedStatement stm = con.prepareStatement(query);
+                
+        ) {
+            stm.setString(1, nomeUtente);
+            stm.setString(2, difficolta);
+            try(ResultSet rs=stm.executeQuery()){
+            while(rs.next()){
+                punteggi.add(rs.getInt("maxPunteggio")); 
+                punteggi.add(rs.getInt("mediaPunteggio")); 
+            }
+
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Errore SQL statistiche punteggi", ex);
+        }
+        
+        return punteggi;
     }
 
 }

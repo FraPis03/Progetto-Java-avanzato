@@ -94,8 +94,17 @@ public class RisultatiController implements Initializable {
     }
 
     tableErrori.setItems(dati);
-    labelPunteggio.setText("Punteggio: " + risposteUtente.size());
-    int punteggio = 5;
-    userDB.aggiornaPunteggio(user, punteggio);
+    int punteggio = this.calcolaPunteggio(risposteUtente, risposteCorrette);
+    labelPunteggio.setText("Punteggio: " + punteggio);
+    userDB.aggiornaPunteggio(user, punteggio,MainViewController.getDifficolta());
+    }
+    
+    public int calcolaPunteggio(List<String> risposteUtente,List<String> risposteCorrette){
+        int punteggio=0;
+        for(int i=0;i<risposteUtente.size();i++){
+            if(risposteUtente.get(i).contentEquals(risposteCorrette.get(i))) punteggio+=10;
+        }
+        
+        return punteggio;
     }
 }

@@ -171,6 +171,9 @@ public class WordageddonController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
             Parent root = loader.load();
 
+            MainViewController controller = loader.getController();
+            controller.setUtenteLoggato(user);
+
             // Ottieni lo stage corrente
             Stage stage = (Stage) bottoneConfermaAccesso.getScene().getWindow();
             stage.setScene(new Scene(root));
