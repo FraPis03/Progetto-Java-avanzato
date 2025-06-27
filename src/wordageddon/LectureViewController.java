@@ -63,7 +63,7 @@ public class LectureViewController implements Initializable {
     }    
     
     private void startCountdownTimer() {
-    final int[] timeLeft = {5};
+    int[] timeLeft = {5};
     labelTempo.setText("Tempo rimanente: " + timeLeft[0] + "s");
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -102,16 +102,16 @@ public class LectureViewController implements Initializable {
                 break;
             }
             case "Medio":{
-                numFileDifficolta=5;
+                numFileDifficolta=4;
                 break;
             }
             case "Difficile":{
-                numFileDifficolta=6;
+                numFileDifficolta=5;
                 break;
             }
         }
         
-        List<File> files=adminDB.recuperaFile(MainViewController.getDifficolta());
+        List<File> files=adminDB.recuperaFile(this.difficolta);
         List<String> stopWords=adminDB.recuperaStopWords();
         
         int numFile=files.size();

@@ -166,7 +166,7 @@ public class UtenteJDBC implements UtenteDAO {
     public List<Punteggi> punteggiUtente(String nomeUtente,String difficolta) {
         List<Punteggi> punteggi=new ArrayList<>();
         
-        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=? AND difficolta=?";
+        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=? AND difficolta=? ORDER BY dataOra DESC";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);

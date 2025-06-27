@@ -2,6 +2,7 @@ package wordageddon;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -39,32 +40,32 @@ public class Domande {
     vengono selezionate 4 parole casuali con 4 frequenze diverse da un singolo
     documento casuale tra quelli passati
     */
-    public List<String> generateConfrontoDocumentoSingolo(int numdoc) {
+   public List<String> generateConfrontoDocumentoSingolo(int numdoc) {
 
     List<String> domandeParole = new ArrayList<>();
     Map<String, Integer> domande = new LinkedHashMap<>();
 
     Random r = new Random();
-    
-    List<Map.Entry<String,Map<String, Integer>>> documento = new ArrayList<>(this.documenti.entrySet());
-    Map.Entry<String,Map<String, Integer>> documentoSelezionato=documento.get(numdoc);
-   
-    
+
+    List<Map.Entry<String, Map<String, Integer>>> documento = new ArrayList<>(this.documenti.entrySet());
+    Map.Entry<String, Map<String, Integer>> documentoSelezionato = documento.get(numdoc);
+
     List<Map.Entry<String, Integer>> listaParole = new ArrayList<>(documentoSelezionato.getValue().entrySet());
-    String docSel=documentoSelezionato.getKey();
+    String docSel = documentoSelezionato.getKey();
 
     if (listaParole.size() < 15) {
-        throw new RuntimeException("Il documento ha meno di 10 parole.");
+        throw new RuntimeException("Il documento ha meno di 15 parole.");
     }
+    Collections.shuffle(listaParole);
 
     int tentativi = 0;
 
-    //aggiungo altre 3 parole casuali
-    while (domandeParole.size() < 4 && tentativi < 150) {
-        Map.Entry<String, Integer> scelta = listaParole.get(r.nextInt(25));
+    while (domandeParole.size() < 4 && tentativi < 350) {
+        Map.Entry<String, Integer> scelta = listaParole.get(tentativi);
         String parola = scelta.getKey();
         int frequenza = scelta.getValue();
 
+        
         if (!domandeParole.contains(parola) && !domande.containsValue(frequenza)) {
             domande.put(parola, frequenza);
             domandeParole.add(parola);
@@ -78,60 +79,64 @@ public class Domande {
         throw new RuntimeException("Impossibile trovare 4 parole con frequenze diverse.");
     }
 
-    domandeParole.add(this.risultato(domande.entrySet()));
+    domandeParole.add(this.risultato(domande.entrySet())); 
     domandeParole.add(docSel);
+
     System.out.println("Domande generate con parole: " + domande);
 
     return domandeParole;
 }
 
-   
-    //seleziono 4 parole casuali scelte tra tutti i documenti che abbiano frequenze diverse
-    public List<String> generateConfrontoAssoluto(){
-        
-        List<String> domandeParole=new ArrayList<>();
-        Map<String,Integer> domande=new LinkedHashMap<>();
-        int numeroDocumenti=this.documenti.size();
-        Random r=new Random();
-        int count=0;
-        int numeroMassimeIterazioni=0;       
-       
-        while(domande.size()<4 && numeroMassimeIterazioni<150){
-            List<Map.Entry<String,Map<String,Integer>>> doc=new ArrayList<>(this.documenti.entrySet());
-            Map.Entry<String,Map<String, Integer>> documentoSelezionato=doc.get(r.nextInt(this.documenti.size()));
-            Map<String,Integer> documento=documentoSelezionato.getValue();
-   
-            List<String> parole = new ArrayList<>(documento.keySet());
-            count=0;
-            String parola=null;
-            
-           if(documento.size()<10) throw new RuntimeException(" il documento ha troppe poche parole");
-           if(numeroMassimeIterazioni>149) throw new RuntimeException(" problemi con il documento");
-           
-           if(domandeParole.size()<2) parola=parole.get(r.nextInt(10));
-           else parola=parole.get(r.nextInt(parole.size()));
-           System.out.println("la parola è "+parola);
-           if(!domande.containsKey(parola)){       
-               for(Map<String,Integer> m:this.documenti.values()){
-                   if(m.containsKey(parola)) count+=m.get(parola);
-               }
-               
-               if(!domande.containsValue(count)) domande.put(parola, count);
-               
-           }
-           
-           numeroMassimeIterazioni++;
+
+   //scelgo 4 parole casuali tra tutti i documenti
+    public List<String> generateConfrontoAssoluto() {
+    List<String> domandeParole = new ArrayList<>();
+    Map<String, Integer> domande = new LinkedHashMap<>();
+    Random r = new Random();
+    int maxTentativi = 150;
+    int tentativi = 0;
+
+    List<Map.Entry<String, Map<String, Integer>>> documentiList = new ArrayList<>(this.documenti.entrySet());
+
+    while (domande.size() < 4 && tentativi < maxTentativi) {
+        // Scelgo un documento casuale
+        Map.Entry<String, Map<String, Integer>> documentoSelezionato = documentiList.get(r.nextInt(documentiList.size()));
+        Map<String, Integer> documento = documentoSelezionato.getValue();
+
+        List<String> parole = new ArrayList<>(documento.keySet());
+        String parola;
+        if (domandeParole.size() >= 3) {
+            parola = parole.get(r.nextInt(parole.size()));
+        } else {
+            parola = parole.get(r.nextInt(8));
         }
-        
-        domandeParole.addAll(domande.keySet());
-    
-       domandeParole.add(this.risultato(domande.entrySet()));
-        
-       System.out.println("le domande riguardano le parole:"+domande);
-       
-       return domandeParole;
+
+        // Calcolo la frequenza in tutti i documenti
+        if (!domande.containsKey(parola)) {
+            int count = 0;
+            for (Map<String, Integer> m : this.documenti.values()) {
+                count += m.getOrDefault(parola, 0);
+            }
+
+            if (!domande.containsValue(count)) {
+                domande.put(parola, count);
+            }
+        }
+
+        tentativi++;
     }
-    
+
+    if (domande.size() < 4) {
+        throw new RuntimeException("Impossibile trovare 4 parole con frequenze assolute diverse.");
+    }
+
+    domandeParole.addAll(domande.keySet());
+    domandeParole.add(this.risultato(domande.entrySet())); // metodo per trovare la parola con freq max
+    System.out.println("Domande generate: " + domande);
+
+    return domandeParole;
+}
+
 
     //scelgo una parola in un documento e restituisco la sua frequenza in quel documento e altre 3 frequenze casuali
     public List<String> generateFrequenzaSingolo(int numdoc){
@@ -141,7 +146,7 @@ public class Domande {
         Random r = new Random();
 
         List<Map.Entry<String, Map<String, Integer>>> docs = new ArrayList<>(documenti.entrySet());
-        Map.Entry<String, Map<String, Integer>> documentoSelezionato = docs.get(r.nextInt(numdoc));
+        Map.Entry<String, Map<String, Integer>> documentoSelezionato = docs.get(numdoc);
         Map<String, Integer> documento= documentoSelezionato.getValue();
         String docSel=documentoSelezionato.getKey();
         List<Map.Entry<String,Integer>> doc=new ArrayList<>(documento.entrySet());
@@ -218,13 +223,15 @@ public class Domande {
     int freq = doc.get(0).getValue();
     domanda.add(parola);
     domande.put(parola, freq);
+    
+    Collections.shuffle(doc);
 
     
     int tentativi = 0;
-    while (domanda.size() < 4 && tentativi < 150) {
-        int i = r.nextInt(25);
-        String parolaCasuale = doc.get(i).getKey();
-        int freqCasuale = doc.get(i).getValue();
+    while (domanda.size() < 4 && tentativi < 350) {
+        Map.Entry<String, Integer> scelta = doc.get(tentativi);
+        String parolaCasuale = doc.get(tentativi).getKey();
+        int freqCasuale = doc.get(tentativi).getValue();
 
         if (!domande.containsKey(parolaCasuale) && !domande.containsValue(freqCasuale)) {
             domande.put(parolaCasuale, freqCasuale);

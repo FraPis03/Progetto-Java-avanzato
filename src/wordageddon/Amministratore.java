@@ -65,7 +65,7 @@ public class Amministratore extends Utente{
     try (BufferedReader br = new BufferedReader(new FileReader(f))) {
   
        List<String> parole = br.lines()
-            .flatMap(linea -> Arrays.stream(linea.toLowerCase().split("\\W+")))
+            .flatMap(linea -> Arrays.stream(linea.toLowerCase().split("[^\\p{L}\\p{Nd}]+")))
             .filter(parola -> !parola.isEmpty())
             .filter(parola -> !this.stopWords.contains(parola)).collect(Collectors.toList());
 

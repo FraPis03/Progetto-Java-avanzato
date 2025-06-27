@@ -51,7 +51,7 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
                 for (File file : files) {
                     try (BufferedReader testo = new BufferedReader(new FileReader(file))) {
                         Map<String, Integer> mappa = testo.lines()
-                                .flatMap(line -> Stream.of(line.split("\\W+")))//faccio la divisione sulla base di tutto ciò 
+                                .flatMap(line -> Stream.of(line.split("[^\\p{L}\\p{Nd}]+")))//faccio la divisione sulla base di tutto ciò 
                                 //che non sono caratteri o numeri
                                 .filter(parola -> !parola.isEmpty())//controllo che la parola non sia vuota
                                 .map(parola -> parola.toLowerCase())
@@ -70,8 +70,12 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
                                         (a, b) -> a,
                                         LinkedHashMap::new
                                 ));
-
-                        risultati.putIfAbsent(file.getName(),ordinata);
+                        String nomeFile = file.getName();
+                        int ultimoPunto = nomeFile.lastIndexOf('.');
+                        if (ultimoPunto > 0) {
+                        nomeFile = nomeFile.substring(0, ultimoPunto);
+                        }
+                        risultati.putIfAbsent(nomeFile,ordinata);
                     }
                 }
 

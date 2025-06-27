@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,6 @@ public class MainViewController implements Initializable {
     UtenteJDBC userDB;
     
     private static String difficoltaSelezionata;
-
     @FXML
     private Button bottoneGioca;
     @FXML
@@ -58,6 +58,8 @@ public class MainViewController implements Initializable {
             difficoltaSelezionata=sceltaDifficolta.getValue();
         });
         
+        if(user!=null) this.setAdminButton();
+       
         sceltaDifficolta.setValue("Facile");
         
         bottoneClassifica.setOnAction(e->{
@@ -117,9 +119,8 @@ public class MainViewController implements Initializable {
 
     public void setUtenteLoggato(Utente u){
         user=u;
-        String ruolo = userDB.getRuolo(user.getNomeUtente());
-        bottoneAdmin.setDisable(!"admin".equals(ruolo));
- }    
+        this.setAdminButton();
+    }    
     
     public static Utente getUtente(){
         return user;
@@ -127,5 +128,9 @@ public class MainViewController implements Initializable {
     
     public static String getDifficolta(){
         return difficoltaSelezionata;
+    }
+    
+    public void setAdminButton(){
+        if(!userDB.getRuolo(user.getNomeUtente()).contentEquals("admin")) bottoneAdmin.setDisable(true);
     }
 }
