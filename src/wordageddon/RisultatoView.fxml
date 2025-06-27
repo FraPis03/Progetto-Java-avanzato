@@ -25,12 +25,15 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </Label>
-            <TableView fx:id="tableErrori" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableErrori" maxWidth="560.0" prefHeight="200.0" prefWidth="560.0">
               <columns>
-                <TableColumn fx:id="colNumeroDomanda" maxWidth="100.0" prefWidth="100.0" text="N. domanda" />
-                <TableColumn fx:id="colRispostaUtente" maxWidth="225.0" minWidth="4.0" prefWidth="225.0" text="Risposta inserita" />
-                <TableColumn fx:id="colRispostaCorretta" maxWidth="225.0" prefWidth="225.0" text="Risposta corretta" />
+                <TableColumn fx:id="colDomanda" prefWidth="150.0" text="N. domanda" />
+                <TableColumn fx:id="colRispostaUtente" prefWidth="205.0" text="Risposta inserita" />
+                <TableColumn fx:id="colRispostaCorretta" prefWidth="205.0" text="Risposta corretta" />
               </columns>
+              <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+              </columnResizePolicy>
             </TableView>
             <Button fx:id="btnTornaMenu" mnemonicParsing="false" text="Ritorna al menù">
                <VBox.margin>

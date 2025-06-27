@@ -58,8 +58,8 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
     //memorizzo sul db il path del file passato dall admin
     @Override
-    public boolean memorizzaFile(Amministratore admin, File f) {
-        String query = "INSERT INTO AmministratoreFile (nome, file) VALUES (?, ?)";
+    public boolean memorizzaFile(Amministratore admin, File f,String difficolta) {
+        String query = "INSERT INTO AmministratoreFile (nome, file, difficolta) VALUES (?, ?, ?)";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -67,6 +67,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         ) {
             stm.setString(1, admin.getNomeUtente());
             stm.setString(2, f.getPath());
+            stm.setString(3, difficolta);
             
             int righe = stm.executeUpdate();
             if (righe == 0) {
@@ -82,26 +83,32 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
     //recupero i path dei vari file presenti sul db e restituisco una lista di file
     @Override
-    public List<File> recuperaFile() {
-        
-        List<File> files=new ArrayList<>();
-        
-        String query = "SELECT file FROM AmministratoreFile";
+public List<File> recuperaFile(String difficolta) {
 
-        try (
-            Connection con = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stm = con.prepareStatement(query);
-                ResultSet rs=stm.executeQuery();
-        ) {
-            
-            while(rs.next()) files.add(new File(rs.getString("file")));
+    List<File> files = new ArrayList<>();
 
-        } catch (SQLException ex) {
-            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Errore SQL recupera file", ex);
+    String query = "SELECT file FROM AmministratoreFile WHERE difficolta=?";
+
+    try (
+        Connection con = DriverManager.getConnection(URL, USER, PASS);
+        PreparedStatement stm = con.prepareStatement(query);
+    ) {
+        stm.setString(1, difficolta);
+
+        try (ResultSet rs = stm.executeQuery()) {
+            while (rs.next()) {
+                files.add(new File(rs.getString("file")));
+            }
         }
-        return files;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        throw new RuntimeException("Errore SQL recupera file", ex);
     }
+
+    return files;
+}
+
 
     //restituisco tutte le stopwords presenti sul db
     @Override
@@ -150,4 +157,27 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         }
         return check;
     }
+
+    @Override
+    public List<File> recuperaAllFile() {
+        List<File> files=new ArrayList<>();
+        
+        String query = "SELECT file FROM AmministratoreFile";
+
+        try (
+            Connection con = DriverManager.getConnection(URL, USER, PASS);
+            PreparedStatement stm = con.prepareStatement(query);
+                ResultSet rs=stm.executeQuery();
+        ) {
+            
+            while(rs.next()) files.add(new File(rs.getString("file")));
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Errore SQL recupera file", ex);
+        }
+        return files;
+    }
+
+    
 }

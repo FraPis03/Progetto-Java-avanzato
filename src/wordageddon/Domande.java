@@ -39,19 +39,16 @@ public class Domande {
     vengono selezionate 4 parole casuali con 4 frequenze diverse da un singolo
     documento casuale tra quelli passati
     */
-    public List<String> generateConfrontoDocumentoSingolo() {
+    public List<String> generateConfrontoDocumentoSingolo(int numdoc) {
 
     List<String> domandeParole = new ArrayList<>();
     Map<String, Integer> domande = new LinkedHashMap<>();
 
     Random r = new Random();
-
-    
-    int numeroDocumento = r.nextInt(this.documenti.size());
     
     List<Map.Entry<String,Map<String, Integer>>> documento = new ArrayList<>(this.documenti.entrySet());
-    Map.Entry<String,Map<String, Integer>> documentoSelezionato=documento.get(numeroDocumento);
-    
+    Map.Entry<String,Map<String, Integer>> documentoSelezionato=documento.get(numdoc);
+   
     
     List<Map.Entry<String, Integer>> listaParole = new ArrayList<>(documentoSelezionato.getValue().entrySet());
     String docSel=documentoSelezionato.getKey();
@@ -59,11 +56,6 @@ public class Domande {
     if (listaParole.size() < 15) {
         throw new RuntimeException("Il documento ha meno di 10 parole.");
     }
-
-    
-    Map.Entry<String, Integer> prima = listaParole.get(0);//seleziono la prima parola che so ha la frequenza maggiore
-    domande.put(prima.getKey(), prima.getValue());
-    domandeParole.add(prima.getKey());
 
     int tentativi = 0;
 
@@ -141,17 +133,15 @@ public class Domande {
     }
     
 
-    //Ampliare nel caso in cui ci siano 2 o più parole con la stessa frequenza massima
-    // mischiare i risultati poichè la più frequente è sempre al primo posto
     //scelgo una parola in un documento e restituisco la sua frequenza in quel documento e altre 3 frequenze casuali
-    public List<String> generateFrequenzaSingolo(){
+    public List<String> generateFrequenzaSingolo(int numdoc){
         
         List<String> domanda=new ArrayList<>();
         
         Random r = new Random();
 
         List<Map.Entry<String, Map<String, Integer>>> docs = new ArrayList<>(documenti.entrySet());
-        Map.Entry<String, Map<String, Integer>> documentoSelezionato = docs.get(r.nextInt(docs.size()));
+        Map.Entry<String, Map<String, Integer>> documentoSelezionato = docs.get(r.nextInt(numdoc));
         Map<String, Integer> documento= documentoSelezionato.getValue();
         String docSel=documentoSelezionato.getKey();
         List<Map.Entry<String,Integer>> doc=new ArrayList<>(documento.entrySet());

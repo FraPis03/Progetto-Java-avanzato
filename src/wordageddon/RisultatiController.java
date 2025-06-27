@@ -37,7 +37,7 @@ public class RisultatiController implements Initializable {
     private TableView<ObservableList<String>> tableErrori;
 
     @FXML
-    private TableColumn<ObservableList<String>, String> colNumeroDomanda;
+    private TableColumn<ObservableList<String>, String> colDomanda;
 
     @FXML
     private TableColumn<ObservableList<String>, String> colRispostaUtente;
@@ -54,7 +54,7 @@ public class RisultatiController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         userDB=new UtenteJDBC();
         // TODO
-        colNumeroDomanda.setCellValueFactory(cellData -> 
+        colDomanda.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(0))
     );
     colRispostaUtente.setCellValueFactory(cellData -> 
@@ -87,7 +87,7 @@ public class RisultatiController implements Initializable {
     
     for (int i = 0; i < risposteUtente.size(); i++) {
         ObservableList<String> riga = FXCollections.observableArrayList();
-        riga.add(String.valueOf(i + 1));            
+        riga.add(String.valueOf(i+1));            
         riga.add(risposteUtente.get(i));            
         riga.add(risposteCorrette.get(i));          
         dati.add(riga);

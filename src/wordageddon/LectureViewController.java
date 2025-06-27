@@ -42,7 +42,7 @@ public class LectureViewController implements Initializable {
        
     Domande d;
     
-    int difficolta;
+    String difficolta;
 
     @FXML
     private VBox contenitoreVBox;
@@ -76,7 +76,7 @@ public class LectureViewController implements Initializable {
                 Parent root = loader.load();
 
                 QuizViewController controller = loader.getController();
-                controller.domande(d,difficolta);
+                controller.domande(d,this.difficolta);
 
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) contenitoreVBox.getScene().getWindow();
@@ -90,19 +90,35 @@ public class LectureViewController implements Initializable {
     timeline.play();
 }
 
-   public void difficolta(int difficolta){
+   public void difficolta(){
         adminDB=new AmministratoreJDBC();
-        this.difficolta=difficolta;
+        this.difficolta=MainViewController.getDifficolta();
         List<File> files1=new ArrayList();
+        int numFileDifficolta=0;
         
-        List<File> files=adminDB.recuperaFile();
+        switch(difficolta){
+            case "Facile":{
+                numFileDifficolta=3;
+                break;
+            }
+            case "Medio":{
+                numFileDifficolta=5;
+                break;
+            }
+            case "Difficile":{
+                numFileDifficolta=6;
+                break;
+            }
+        }
+        
+        List<File> files=adminDB.recuperaFile(MainViewController.getDifficolta());
         List<String> stopWords=adminDB.recuperaStopWords();
         
         int numFile=files.size();
         Random r=new Random();
-        while(files1.size()<difficolta){
+        while(files1.size()<numFileDifficolta){
             
-            if(numFile<difficolta){
+            if(numFile<numFileDifficolta){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Numero File Errore");
                     alert.setHeaderText(null);

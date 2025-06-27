@@ -120,7 +120,6 @@ public class WordageddonController implements Initializable {
             
             if (u.checkCredenziali(nomeUtente, password)) {
         try {
-            if(u.getRuolo(nomeUtente).contentEquals("Utente")){//controllo se l utente è un admin oppure no
             //Cambio la schermata se le credenziali sono corrette
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
             Parent root = loader.load();
@@ -133,21 +132,6 @@ public class WordageddonController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle("Wordageddon");
             stage.show();
-            }
-            else{
-                //Cambio la schermata se le credenziali sono corrette
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminView.fxml"));
-            Parent root = loader.load();
-            
-            AdminController controller = loader.getController();
-            controller.setAmministratore(new Utente(nomeUtente,password,""));
-
-            // Ottieni lo stage corrente
-            Stage stage = (Stage) bottoneConfermaAccesso.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Admin Wordageddon");
-            stage.show();
-            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -82,12 +82,12 @@ public class AdminController implements Initializable {
        
        bottoneIndietro.setOnAction(e -> {
            try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage) bottoneIndietro.getScene().getWindow();
         stage.setScene(new Scene(root));
-        stage.setTitle("Accesso - Wordageddon");
+        stage.setTitle("Wordageddon");
         stage.show();
     } catch (IOException ex) {
         ex.printStackTrace();
@@ -136,24 +136,38 @@ public class AdminController implements Initializable {
 
     // Mostra la finestra di dialogo per la selezione del file
     File fileSelezionato = fileChooser.showOpenDialog(stage);
+    String difficolta=null;
 
     if (fileSelezionato != null) {
         admin.setStopWords(adminDB.recuperaStopWords());
         if(admin.checkFile(fileSelezionato)){
-            if(adminDB.memorizzaFile(admin, fileSelezionato)){
-                admin.addFiles(fileSelezionato);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("File caricato");
-                alert.setHeaderText(null);
-                alert.setContentText("il file è stato caricato con successo nel database");
-                alert.showAndWait();
+            int lunghezzaFile=admin.getLunghezza(fileSelezionato);
+            if(lunghezzaFile>150 || lunghezzaFile<450){
+                if(lunghezzaFile>=150 && lunghezzaFile<250) difficolta="Facile";
+                if(lunghezzaFile>=250 && lunghezzaFile<350) difficolta="Medio";
+                if(lunghezzaFile>=350 && lunghezzaFile<450) difficolta="Difficile";
+                if(adminDB.memorizzaFile(admin, fileSelezionato,difficolta)){
+                    admin.addFiles(fileSelezionato);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("File caricato");
+                    alert.setHeaderText(null);
+                    alert.setContentText("il file è stato caricato con successo nel database");
+                    alert.showAndWait();
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("File errore");
+                    alert.setHeaderText(null);
+                    alert.setContentText("il File non è stato caricato nel database \n"
+                            + "perchè già presente al suo interno oppure per un errore di caricamento");
+                     alert.showAndWait();
+                }
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("File errore");
                 alert.setHeaderText(null);
-                alert.setContentText("il File non è stato caricato nel database \n"
-                            + "perchè già presente al suo interno oppure per un errore di caricamento");
+                alert.setContentText("il File deve avere un numero di parole compreso tra 150 e 450");
                 alert.showAndWait();
             }
         }
@@ -180,7 +194,7 @@ public class AdminController implements Initializable {
         List<String> stop=new ArrayList<>(stopWords);
         admin.setStopWords(stop);
         boolean check=true;
-        for(File f:adminDB.recuperaFile()){
+        for(File f:adminDB.recuperaAllFile()){
             if(!admin.checkFile(f)){
                 check=false;
                 filesErrati.add(f);

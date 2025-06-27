@@ -3,6 +3,7 @@ package wordageddon;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -101,6 +103,21 @@ public class Amministratore extends Utente{
     public void setStopWords(List<String> stopWords) {
         this.stopWords = stopWords;
     }
+
+    public int getLunghezza(File f) {
+    int count = 0;
+    try (Scanner scanner = new Scanner(f)) {
+        while (scanner.hasNext()) {
+            scanner.next();
+            count++;
+        }
+        System.out.println("il numero di parole è: "+count);
+    } catch (FileNotFoundException e) {
+        System.err.println("File non trovato: " + f.getAbsolutePath());
+    }
+    return count;
+}
+
     
     
 }

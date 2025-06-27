@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,6 +30,8 @@ public class MainViewController implements Initializable {
     
     static Utente user;
     
+    UtenteJDBC userDB;
+    
     private static String difficoltaSelezionata;
 
     @FXML
@@ -38,7 +41,9 @@ public class MainViewController implements Initializable {
     @FXML
     private ChoiceBox<String> sceltaDifficolta;
     @FXML
-    private Button bottoneStorico;
+    private Button bottoneAdmin;
+    @FXML
+    private Button bottoneClassifica;
 
     /**
      * Initializes the controller class.
@@ -47,6 +52,7 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         sceltaDifficolta.getItems().addAll("Facile", "Medio", "Difficile");
+        userDB=new UtenteJDBC();
         
         sceltaDifficolta.setOnAction(e->{
             difficoltaSelezionata=sceltaDifficolta.getValue();
@@ -54,7 +60,7 @@ public class MainViewController implements Initializable {
         
         sceltaDifficolta.setValue("Facile");
         
-        bottoneStorico.setOnAction(e->{
+        bottoneClassifica.setOnAction(e->{
             try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassificaView.fxml"));
             Parent root;
@@ -69,32 +75,33 @@ public class MainViewController implements Initializable {
             }
         });
         
-        bottoneGioca.setOnAction(e->{
-            String difficolta=sceltaDifficolta.getValue();
-            int difficolta1=0;
-            switch (difficolta){
-                case "Facile": {
-                    difficolta1=3;
-                    break;
-                }
-                case "Medio": {
-                    difficolta1=5;
-                    break;
-                }             
-                case "Difficile":{
-                    difficolta1=6;
-                    break;
-                }
-            }
+        bottoneAdmin.setOnAction(e->{
             
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminView.fxml"));
+            Parent root;
+            try {
+                root = loader.load();
+                AdminController controller = loader.getController();
+            controller.setAmministratore(user);
+
+            // Ottieni lo stage corrente
+            Stage stage = (Stage) bottoneAdmin.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Admin Wordageddon");
+            stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        bottoneGioca.setOnAction(e->{   
             try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LectureView.fxml"));
             Parent root;
             root = loader.load();
             
             LectureViewController controller = loader.getController();
-            System.out.println("la difficoltà vale: "+difficolta1);
-            controller.difficolta(difficolta1);
+            controller.difficolta();
             
              // Ottieni lo stage corrente
              
@@ -110,7 +117,9 @@ public class MainViewController implements Initializable {
 
     public void setUtenteLoggato(Utente u){
         user=u;
-    }    
+        String ruolo = userDB.getRuolo(user.getNomeUtente());
+        bottoneAdmin.setDisable(!"admin".equals(ruolo));
+ }    
     
     public static Utente getUtente(){
         return user;
