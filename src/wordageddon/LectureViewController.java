@@ -17,6 +17,9 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -42,6 +46,12 @@ public class LectureViewController implements Initializable {
        
     Domande d;
     
+    int numFileDifficolta;
+    
+    IntegerProperty numFileCorrente;
+    
+    List<File> files1;
+    
     String difficolta;
 
     @FXML
@@ -52,6 +62,14 @@ public class LectureViewController implements Initializable {
     private ScrollPane scrollPaneTesto;
     @FXML
     private Text testoContenuto;
+    @FXML
+    private Label labelNomeDocumento;
+    @FXML
+    private Button bottonePrecedente;
+    @FXML
+    private Label labelIndiceDocumento;
+    @FXML
+    private Button bottoneSuccessivo;
 
     /**
      * Initializes the controller class.
@@ -59,11 +77,22 @@ public class LectureViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-       
+        numFileCorrente=new SimpleIntegerProperty(0);
+        bottoneSuccessivo.setOnAction(e->{
+            numFileCorrente.set(numFileCorrente.get()+1);
+            this.setVisualizazzioneDocumenti();
+            this.aggiornaIndiceDocumento();
+        });
+        
+        bottonePrecedente.setOnAction(e->{
+            numFileCorrente.set(numFileCorrente.get()-1);
+            this.setVisualizazzioneDocumenti();
+            this.aggiornaIndiceDocumento();
+        }); 
     }    
     
     private void startCountdownTimer() {
-    int[] timeLeft = {5};
+    int[] timeLeft = {30};
     labelTempo.setText("Tempo rimanente: " + timeLeft[0] + "s");
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -86,15 +115,16 @@ public class LectureViewController implements Initializable {
             }
         }
     }));
-    timeline.setCycleCount(5);  // numero di secondi
+    timeline.setCycleCount(30);  // numero di secondi
     timeline.play();
 }
 
    public void difficolta(){
         adminDB=new AmministratoreJDBC();
         this.difficolta=MainViewController.getDifficolta();
-        List<File> files1=new ArrayList();
-        int numFileDifficolta=0;
+        files1=new ArrayList();
+        numFileDifficolta=0;
+        numFileCorrente.set(0);
         
         switch(difficolta){
             case "Facile":{
@@ -110,6 +140,11 @@ public class LectureViewController implements Initializable {
                 break;
             }
         }
+        
+                
+        bottonePrecedente.disableProperty().bind(numFileCorrente.isEqualTo(0));
+        bottoneSuccessivo.disableProperty().bind(numFileCorrente.greaterThanOrEqualTo(numFileDifficolta - 1));
+       
         
         List<File> files=adminDB.recuperaFile(this.difficolta);
         List<String> stopWords=adminDB.recuperaStopWords();
@@ -154,11 +189,15 @@ public class LectureViewController implements Initializable {
             ex.printStackTrace();
         });
         
-        StringBuffer sb=new StringBuffer();
+        this.setVisualizazzioneDocumenti();
+   }
+   
+   public void setVisualizazzioneDocumenti(){
+       StringBuffer sb=new StringBuffer();
         
-        for(File f:files1){
-            sb.append(f.getName()+"\n");
-            try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        labelNomeDocumento.setText(this.getNomeFile());
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(files1.get(numFileCorrente.get())))) {
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line).append('\n');
@@ -166,13 +205,20 @@ public class LectureViewController implements Initializable {
         } catch (IOException ex) {
               ex.printStackTrace();
         }
- 
-        sb.append('\n');
-        
-        }
-        
         testoContenuto.setText(sb.toString());
-        
+        this.aggiornaIndiceDocumento();
+   }
+   
+   public void aggiornaIndiceDocumento(){
+       labelIndiceDocumento.setText((numFileCorrente.get()+1)+"/"+numFileDifficolta);
    }
 
+   public String getNomeFile(){
+       String nomeFile = files1.get(numFileCorrente.get()).getName();
+       int ultimoPunto = nomeFile.lastIndexOf('.');
+        if (ultimoPunto > 0) {
+            nomeFile = nomeFile.substring(0, ultimoPunto);
+        }
+     return nomeFile.toUpperCase();
+   }
 }

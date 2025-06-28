@@ -11,22 +11,34 @@
             xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
             fx:controller="wordageddon.LectureViewController">
    <children>
-      <VBox fx:id="contenitoreVBox" alignment="CENTER" layoutX="118.0" layoutY="46.0"
+      <VBox fx:id="contenitoreVBox" alignment="TOP_CENTER" layoutX="0.0" layoutY="0.0"
             prefHeight="400.0" prefWidth="600.0" spacing="20.0"
             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="labelTempo" text="Tempo rimanente:">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-            <ScrollPane fx:id="scrollPaneTesto" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
-               <content>
-                  <Text fx:id="testoContenuto" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="540.0" />
-               </content>
-            </ScrollPane>
-         </children>
+         <Label fx:id="labelTempo" text="Tempo rimanente:">
+            <font>
+               <Font size="36.0" />
+            </font>
+         </Label>
+         
+         <Label fx:id="labelNomeDocumento" text="Nome Documento" alignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Label>
+         
+         <ScrollPane fx:id="scrollPaneTesto" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
+            <content>
+               <Text fx:id="testoContenuto" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="540.0" />
+            </content>
+         </ScrollPane>
+         
+         <HBox alignment="CENTER" spacing="10.0">
+            <Button fx:id="bottonePrecedente" text="←" />
+            <Label fx:id="labelIndiceDocumento" text="Documento 1 di N" />
+            <Button fx:id="bottoneSuccessivo" text="→" />
+         </HBox>
+         
       </VBox>
    </children>
 </AnchorPane>
