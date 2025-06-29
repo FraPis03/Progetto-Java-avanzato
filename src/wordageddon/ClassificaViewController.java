@@ -60,11 +60,11 @@ public class ClassificaViewController implements Initializable {
     @FXML
     private ChoiceBox<String> difficoltaChoiceBox;
     @FXML
-    private TableColumn<ObservableList<String>, String> colDifficolta;
-    @FXML
     private Label labelMigliorPunteggio;
     @FXML
     private Label labelPunteggioMedio;
+    @FXML
+    private ChoiceBox<String> linguaChoiceBox;
 
     /**
      * Initializes the controller class.
@@ -75,12 +75,15 @@ public class ClassificaViewController implements Initializable {
         userDB=new UtenteJDBC();
     tipoClassificaChoiceBox.getItems().addAll("Singolo", "Globale");
     difficoltaChoiceBox.getItems().addAll("Facile", "Medio", "Difficile");
+    linguaChoiceBox.getItems().addAll("IT","EN","ESP","FR");
 
     tipoClassificaChoiceBox.setOnAction(e -> aggiornaClassifica());
     difficoltaChoiceBox.setOnAction(e -> aggiornaClassifica());
+    linguaChoiceBox.setOnAction(e -> aggiornaClassifica());
 
     tipoClassificaChoiceBox.setValue("Singolo");
     difficoltaChoiceBox.setValue("Facile");
+    linguaChoiceBox.setValue("IT");
     aggiornaClassifica();
         colUtente.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(0))
@@ -90,9 +93,6 @@ public class ClassificaViewController implements Initializable {
     );
     colDataOra.setCellValueFactory(cellData -> 
         new ReadOnlyStringWrapper(cellData.getValue().get(2))
-    );
-    colDifficolta.setCellValueFactory(cellData -> 
-        new ReadOnlyStringWrapper(cellData.getValue().get(3))
     );
     
        indietroButton.setOnAction(e->{
@@ -111,10 +111,10 @@ public class ClassificaViewController implements Initializable {
        });
     }   
     
-    public void utenteSingoloClassifica(String difficolta){
+    public void utenteSingoloClassifica(String difficolta, String lingua){
         this.user=MainViewController.getUtente();
     
-        List<Punteggi> punteggiUtente=userDB.punteggiUtente(user.getNomeUtente(),difficolta);
+        List<Punteggi> punteggiUtente=userDB.punteggiUtente(user.getNomeUtente(),difficolta,lingua);
 
         ObservableList<ObservableList<String>> punteggi=FXCollections.observableArrayList();
 
@@ -128,14 +128,14 @@ public class ClassificaViewController implements Initializable {
     }
         
         classificaTable.setItems(punteggi);
-        this.setStatistiche(difficolta);
+        this.setStatistiche(difficolta,lingua);
 
     }
     
-    public void utenteGlobaleClassifica(String difficolta){
+    public void utenteGlobaleClassifica(String difficolta, String lingua){
         this.user=MainViewController.getUtente();
         
-        Map<String,Punteggi> punteggiGlobali=userDB.punteggiGlobali(difficolta);
+        Map<String,Punteggi> punteggiGlobali=userDB.punteggiGlobali(difficolta,lingua);
 
         ObservableList<ObservableList<String>> punteggi=FXCollections.observableArrayList();
 
@@ -144,28 +144,28 @@ public class ClassificaViewController implements Initializable {
         riga.add(m.getKey());            
         riga.add(String.valueOf(m.getValue().getPunteggio()));            
         riga.add(String.valueOf(m.getValue().getTempo()));    
-        riga.add(difficolta);
         punteggi.add(riga);
     }
         
         classificaTable.setItems(punteggi);
-        this.setStatistiche(difficolta);
+        this.setStatistiche(difficolta,lingua);
     }
     
     private void aggiornaClassifica() {
     String tipo = tipoClassificaChoiceBox.getValue();
     String difficolta = difficoltaChoiceBox.getValue();
+    String lingua=linguaChoiceBox.getValue();
 
-    if (tipo == null || difficolta == null) return;
+    if (tipo == null || difficolta == null || lingua==null) return;
 
     if (tipo.equals("Singolo")) {
-        utenteSingoloClassifica(difficolta);
+        utenteSingoloClassifica(difficolta,lingua);
     } else if (tipo.equals("Globale")) {
-        utenteGlobaleClassifica(difficolta);
+        utenteGlobaleClassifica(difficolta,lingua);
     }
 }
-    public void setStatistiche(String difficolta){
-        List<Integer> statistiche=userDB.statistichePunteggio(user.getNomeUtente(), difficolta);
+    public void setStatistiche(String difficolta,String lingua){
+        List<Integer> statistiche=userDB.statistichePunteggio(user.getNomeUtente(), difficolta,lingua);
         labelMigliorPunteggio.setText("Miglior punteggio: "+String.valueOf(statistiche.get(0)));
         labelPunteggioMedio.setText("Media punteggi: "+String.valueOf(statistiche.get(1)));
     }

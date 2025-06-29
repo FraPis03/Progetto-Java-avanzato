@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -8,18 +7,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/javafx/1" fx:controller="wordageddon.AdminController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0"
+            xmlns:fx="http://javafx.com/javafx/1" fx:controller="wordageddon.AdminController">
    <children>
       <Label fx:id="titoloLabel" layoutX="177.0" layoutY="14.0" text="Pannello admin">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0" orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
-      <Button fx:id="bottoneIndietro" layoutX="28.0" layoutY="25.0" mnemonicParsing="false" text="Indietro" />
-      <StackPane fx:id="areaTrascinamento" layoutX="46.0" layoutY="126.0" prefHeight="150.0" prefWidth="200.0">
+      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0"
+                 orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
+      <Button fx:id="bottoneIndietro" layoutX="28.0" layoutY="25.0"
+              mnemonicParsing="false" text="Indietro" />
+      <StackPane fx:id="areaTrascinamento" layoutX="46.0" layoutY="126.0"
+                 prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0" text="+Trascina qui il file" />
+            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0"
+                  text="+Trascina qui il file" />
          </children>
       </StackPane>
       <Label fx:id="etichettaUpload" layoutX="88.0" layoutY="85.0" text="Upload file">
@@ -28,14 +32,23 @@
          </font>
       </Label>
       <Label fx:id="etichettaOppure" layoutX="121.0" layoutY="289.0" text="Oppure" />
-      <Button fx:id="bottoneSfoglia" layoutX="97.0" layoutY="342.0" mnemonicParsing="false" text="Sfoglia file..." />
+      <Button fx:id="bottoneSfoglia" layoutX="60.0" layoutY="342.0"
+              mnemonicParsing="false" text="Sfoglia file..." />
+      <ChoiceBox fx:id="choiceBoxLingua" layoutX="190.0" layoutY="344.0" prefWidth="60.0" />
+      <ChoiceBox fx:id="choiceBoxLinguaStopword" layoutX="320.0" layoutY="352.0" prefWidth="60.0" />
+
       <Label fx:id="etichettaStopwords" layoutX="392.0" layoutY="85.0" text="StopWords">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="areaStopWords" layoutX="330.0" layoutY="176.0" prefHeight="166.0" prefWidth="247.0" wrapText="true" />
-      <Text fx:id="testoIstruzioni" layoutX="352.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserire le parole da bloccare, separate da una virgola" textAlignment="CENTER" wrappingWidth="200.0" />
-      <Button fx:id="bottoneAggiungiStopword" layoutX="430.0" layoutY="350.0" mnemonicParsing="false" text="Aggiungi StopWord" />
+      <TextArea fx:id="areaStopWords" layoutX="330.0" layoutY="176.0"
+                prefHeight="166.0" prefWidth="247.0" wrapText="true" />
+      <Text fx:id="testoIstruzioni" layoutX="352.0" layoutY="142.0"
+            strokeType="OUTSIDE" strokeWidth="0.0"
+            text="Inserire le parole da bloccare, separate da una virgola"
+            textAlignment="CENTER" wrappingWidth="200.0" />
+      <Button fx:id="bottoneAggiungiStopword" layoutX="430.0" layoutY="350.0"
+              mnemonicParsing="false" text="Aggiungi StopWord" />
    </children>
 </AnchorPane>

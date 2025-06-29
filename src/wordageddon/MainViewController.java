@@ -34,6 +34,9 @@ public class MainViewController implements Initializable {
     UtenteJDBC userDB;
     
     private static String difficoltaSelezionata;
+    
+    private static String linguaSelezionata;
+    
     @FXML
     private Button bottoneGioca;
     @FXML
@@ -44,6 +47,8 @@ public class MainViewController implements Initializable {
     private Button bottoneAdmin;
     @FXML
     private Button bottoneClassifica;
+    @FXML
+    private ChoiceBox<String> sceltaLingua;
 
     /**
      * Initializes the controller class.
@@ -52,15 +57,21 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         sceltaDifficolta.getItems().addAll("Facile", "Medio", "Difficile");
+        sceltaLingua.getItems().addAll("IT", "EN", "ESP","FR");
         userDB=new UtenteJDBC();
         
         sceltaDifficolta.setOnAction(e->{
             difficoltaSelezionata=sceltaDifficolta.getValue();
         });
         
+        sceltaLingua.setOnAction(e->{
+            linguaSelezionata=sceltaLingua.getValue();
+        });
+        
         if(user!=null) this.setAdminButton();
        
         sceltaDifficolta.setValue("Facile");
+        sceltaLingua.setValue("IT");
         
         bottoneClassifica.setOnAction(e->{
             try {
@@ -128,6 +139,10 @@ public class MainViewController implements Initializable {
     
     public static String getDifficolta(){
         return difficoltaSelezionata;
+    }
+    
+    public static String getLingua(){
+        return linguaSelezionata;
     }
     
     public void setAdminButton(){

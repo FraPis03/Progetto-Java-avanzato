@@ -32,8 +32,8 @@ public class AmministratoreJDBC implements AmministratoreDAO {
     
     //aggiungo le stopwords passate in input al db
     @Override
-    public boolean updateStopWords(Amministratore admin, List<String> parole) {
-        String query = "INSERT INTO AmministratoreStopWords (nome, stopword) VALUES (?, ?)";
+    public boolean updateStopWords(Amministratore admin, List<String> parole, String lingua) {
+        String query = "INSERT INTO AmministratoreStopWords (nome, stopword,lingua) VALUES (?, ?,?)";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -42,6 +42,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
            for(String parola:parole){
             stm.setString(1, admin.getNomeUtente());
             stm.setString(2, parola);
+            stm.setString(3, lingua);
 
             int righe = stm.executeUpdate();
             if (righe == 0) {
@@ -58,8 +59,8 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
     //memorizzo sul db il path del file passato dall admin
     @Override
-    public boolean memorizzaFile(Amministratore admin, File f,String difficolta) {
-        String query = "INSERT INTO AmministratoreFile (nome, file, difficolta) VALUES (?, ?, ?)";
+    public boolean memorizzaFile(Amministratore admin, File f,String difficolta,String lingua) {
+        String query = "INSERT INTO AmministratoreFile (nome, file, difficolta,lingua) VALUES (?, ?, ?,?)";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -68,6 +69,7 @@ public class AmministratoreJDBC implements AmministratoreDAO {
             stm.setString(1, admin.getNomeUtente());
             stm.setString(2, f.getPath());
             stm.setString(3, difficolta);
+            stm.setString(4, lingua);
             
             int righe = stm.executeUpdate();
             if (righe == 0) {
@@ -83,17 +85,18 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
     //recupero i path dei vari file presenti sul db e restituisco una lista di file
     @Override
-public List<File> recuperaFile(String difficolta) {
+public List<File> recuperaFile(String difficolta,String lingua) {
 
     List<File> files = new ArrayList<>();
 
-    String query = "SELECT file FROM AmministratoreFile WHERE difficolta=?";
+    String query = "SELECT file FROM AmministratoreFile WHERE difficolta=? AND lingua=?";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
         PreparedStatement stm = con.prepareStatement(query);
     ) {
         stm.setString(1, difficolta);
+        stm.setString(2, lingua);
 
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
@@ -112,25 +115,31 @@ public List<File> recuperaFile(String difficolta) {
 
     //restituisco tutte le stopwords presenti sul db
     @Override
-    public List<String> recuperaStopWords() {
-        List<String> stopWords=new ArrayList<>();
+    public List<String> recuperaStopWords(String lingua) {
+    List<String> stopWords = new ArrayList<>();
+    
+    String query = "SELECT stopword FROM AmministratoreStopWords WHERE lingua = ?";
+
+    try (
+        Connection con = DriverManager.getConnection(URL, USER, PASS);
+        PreparedStatement stm = con.prepareStatement(query);
+    ) {
+        stm.setString(1, lingua);
         
-        String query = "SELECT stopword FROM AmministratoreStopWords";
-
-        try (
-            Connection con = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stm = con.prepareStatement(query);
-                ResultSet rs=stm.executeQuery();
-        ) {
-            
-            while(rs.next()) stopWords.add(rs.getString("stopword"));
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Errore SQL recupera stopword", ex);
+        try (ResultSet rs = stm.executeQuery()) {
+            while (rs.next()) {
+                stopWords.add(rs.getString("stopword"));
+            }
         }
-        return stopWords;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        throw new RuntimeException("Errore SQL recupera stopword", ex);
     }
+
+    return stopWords;
+}
+
 
     //controllo che non vengano inseriti più volte gli stessi file o file con lo stesso nome
     @Override
@@ -159,25 +168,31 @@ public List<File> recuperaFile(String difficolta) {
     }
 
     @Override
-    public List<File> recuperaAllFile() {
-        List<File> files=new ArrayList<>();
+    public List<File> recuperaAllFile(String lingua) {
+    List<File> files = new ArrayList<>();
+    
+    String query = "SELECT file FROM AmministratoreFile WHERE lingua = ?";
+
+    try (
+        Connection con = DriverManager.getConnection(URL, USER, PASS);
+        PreparedStatement stm = con.prepareStatement(query);
+    ) {
+        stm.setString(1, lingua); // <-- Imposta parametro lingua
         
-        String query = "SELECT file FROM AmministratoreFile";
-
-        try (
-            Connection con = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stm = con.prepareStatement(query);
-                ResultSet rs=stm.executeQuery();
-        ) {
-            
-            while(rs.next()) files.add(new File(rs.getString("file")));
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Errore SQL recupera file", ex);
+        try (ResultSet rs = stm.executeQuery()) {
+            while (rs.next()) {
+                files.add(new File(rs.getString("file")));
+            }
         }
-        return files;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        throw new RuntimeException("Errore SQL recupera file", ex);
     }
+
+    return files;
+}
+
 
     
 }

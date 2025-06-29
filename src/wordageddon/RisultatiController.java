@@ -96,7 +96,7 @@ public class RisultatiController implements Initializable {
     tableErrori.setItems(dati);
     int punteggio = this.calcolaPunteggio(risposteUtente, risposteCorrette);
     labelPunteggio.setText("Punteggio: " + punteggio);
-    userDB.aggiornaPunteggio(user, punteggio,MainViewController.getDifficolta());
+    userDB.aggiornaPunteggio(user, punteggio,MainViewController.getDifficolta(),MainViewController.getLingua());
     }
     
     public int calcolaPunteggio(List<String> risposteUtente,List<String> risposteCorrette){

@@ -18,19 +18,26 @@
           <TableColumn fx:id="colUtente" maxWidth="200.0" prefWidth="200.0" text="Utente" />
           <TableColumn fx:id="colPunteggio" maxWidth="150.0" prefWidth="150.0" text="Punteggio" />
           <TableColumn fx:id="colDataOra" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Data e ora" />
-          <TableColumn fx:id="colDifficolta" maxWidth="150.0" prefWidth="150.0" text="Difficoltà" />
         </columns>
       </TableView>
+
       <Label fx:id="titoloLabel" layoutX="252.0" layoutY="14.0" text="Classifica">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
+
       <Button fx:id="indietroButton" layoutX="25.0" layoutY="16.0" mnemonicParsing="false" text="Indietro" />
-      <Text layoutX="41.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo classifica:" />
-      <ChoiceBox fx:id="tipoClassificaChoiceBox" layoutX="150.0" layoutY="71.0" prefHeight="31.0" prefWidth="96.0" />
-      <Label layoutX="340.0" layoutY="76.0" text="Difficoltà:" />
-      <ChoiceBox fx:id="difficoltaChoiceBox" layoutX="417.0" layoutY="70.0" prefHeight="31.0" prefWidth="96.0" />
+
+      <Text layoutX="25.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo:" />
+      <ChoiceBox fx:id="tipoClassificaChoiceBox" layoutX="60.0" layoutY="70.0" prefHeight="31.0" prefWidth="90.0" />
+
+      <Label layoutX="165.0" layoutY="76.0" text="Difficoltà:" />
+      <ChoiceBox fx:id="difficoltaChoiceBox" layoutX="235.0" layoutY="70.0" prefHeight="31.0" prefWidth="90.0" />
+
+      <Label layoutX="340.0" layoutY="76.0" text="Lingua:" />
+      <ChoiceBox fx:id="linguaChoiceBox" layoutX="400.0" layoutY="70.0" prefHeight="31.0" prefWidth="90.0" />
+
       <Label fx:id="labelMigliorPunteggio" layoutX="25.0" layoutY="380.0" text="Miglior punteggio: -" />
       <Label fx:id="labelPunteggioMedio" layoutX="300.0" layoutY="380.0" text="Punteggio medio: -" />
    </children>

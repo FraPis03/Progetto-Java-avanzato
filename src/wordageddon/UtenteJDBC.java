@@ -85,8 +85,8 @@ public class UtenteJDBC implements UtenteDAO {
 
     //aggiorno il punteggio dell utente sul db
     @Override
-    public void aggiornaPunteggio(Utente u, int punteggio,String difficolta) {
-    String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra, difficolta) VALUES (?, ?, ?, ?)";
+    public void aggiornaPunteggio(Utente u, int punteggio,String difficolta,String lingua) {
+    String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra, difficolta, lingua) VALUES (?, ?, ?, ?, ?)";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -97,6 +97,7 @@ public class UtenteJDBC implements UtenteDAO {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
         stmt.setTimestamp(3, timestamp);
         stmt.setString(4, difficolta);
+        stmt.setString(5, lingua);
 
         int rows = stmt.executeUpdate();
         if (rows == 0) {
@@ -163,10 +164,10 @@ public class UtenteJDBC implements UtenteDAO {
 
     //restituisco i punteggi dell utente
     @Override
-    public List<Punteggi> punteggiUtente(String nomeUtente,String difficolta) {
+    public List<Punteggi> punteggiUtente(String nomeUtente,String difficolta, String lingua) {
         List<Punteggi> punteggi=new ArrayList<>();
         
-        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=? AND difficolta=? ORDER BY dataOra DESC";
+        String query = "SELECT punteggio,dataOra FROM punteggi WHERE nomeUtente=? AND difficolta=? AND lingua=? ORDER BY dataOra DESC";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -175,6 +176,7 @@ public class UtenteJDBC implements UtenteDAO {
         ) {
             stm.setString(1, nomeUtente);
             stm.setString(2, difficolta);
+            stm.setString(3, lingua);
             try(ResultSet rs=stm.executeQuery()){
             while(rs.next()){
                 punteggi.add(new Punteggi(rs.getInt("punteggio"),rs.getTimestamp("dataOra")));  
@@ -192,11 +194,11 @@ public class UtenteJDBC implements UtenteDAO {
 
     //ottengo il punteggio massimo da tutti gli utenti sul db
     @Override
-public Map<String, Punteggi> punteggiGlobali(String difficolta) {
+public Map<String, Punteggi> punteggiGlobali(String difficolta,String lingua) {
     Map<String, Punteggi> punteggi = new HashMap<>();
 
     String query = "SELECT nomeUtente, MAX(dataOra) AS dataOra, SUM(punteggio) AS sum_punteggio"
-            + " FROM punteggi WHERE difficolta=? GROUP BY nomeUtente";
+            + " FROM punteggi WHERE difficolta=? AND lingua=? GROUP BY nomeUtente";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -205,6 +207,7 @@ public Map<String, Punteggi> punteggiGlobali(String difficolta) {
     ) {
         
         stm.setString(1, difficolta);
+        stm.setString(2, lingua);
         try (ResultSet rs = stm.executeQuery()) {
         while (rs.next()) {
             String nome = rs.getString("nomeUtente");
@@ -256,10 +259,10 @@ public Map<String, Punteggi> punteggiGlobali(String difficolta) {
     }
 
     @Override
-    public List<Integer> statistichePunteggio(String nomeUtente, String difficolta) {
+    public List<Integer> statistichePunteggio(String nomeUtente, String difficolta, String lingua) {
         List<Integer> punteggi=new ArrayList<>();
         
-        String query = "SELECT MAX(punteggio) as maxPunteggio,AVG(punteggio) as mediaPunteggio FROM punteggi WHERE nomeUtente=? AND difficolta=?";
+        String query = "SELECT MAX(punteggio) as maxPunteggio,AVG(punteggio) as mediaPunteggio FROM punteggi WHERE nomeUtente=? AND difficolta=? AND lingua=?";
 
         try (
             Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -268,6 +271,7 @@ public Map<String, Punteggi> punteggiGlobali(String difficolta) {
         ) {
             stm.setString(1, nomeUtente);
             stm.setString(2, difficolta);
+            stm.setString(3, lingua);
             try(ResultSet rs=stm.executeQuery()){
             while(rs.next()){
                 punteggi.add(rs.getInt("maxPunteggio")); 

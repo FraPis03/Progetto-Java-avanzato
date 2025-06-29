@@ -16,10 +16,10 @@ import java.util.List;
  */
 public interface AmministratoreDAO {
     
-    public boolean updateStopWords(Amministratore admin,List<String> parole);
-    public boolean memorizzaFile(Amministratore admin,File f,String difficolta);
-    public List<File> recuperaFile(String difficolta);
-    public List<File> recuperaAllFile();
-    public List<String> recuperaStopWords();
+    public boolean updateStopWords(Amministratore admin,List<String> parole,String lingua);
+    public boolean memorizzaFile(Amministratore admin,File f,String difficolta,String lingua);
+    public List<File> recuperaFile(String difficolta,String lingua);
+    public List<File> recuperaAllFile(String lingua);
+    public List<String> recuperaStopWords(String lingua);
     public boolean checkNomeFile(String nomeFile);
 }

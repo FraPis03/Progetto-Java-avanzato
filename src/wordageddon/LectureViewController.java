@@ -53,6 +53,8 @@ public class LectureViewController implements Initializable {
     List<File> files1;
     
     String difficolta;
+    
+    String lingua;
 
     @FXML
     private VBox contenitoreVBox;
@@ -92,7 +94,7 @@ public class LectureViewController implements Initializable {
     }    
     
     private void startCountdownTimer() {
-    int[] timeLeft = {30};
+    int[] timeLeft = {5};
     labelTempo.setText("Tempo rimanente: " + timeLeft[0] + "s");
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -115,13 +117,14 @@ public class LectureViewController implements Initializable {
             }
         }
     }));
-    timeline.setCycleCount(30);  // numero di secondi
+    timeline.setCycleCount(5);  // numero di secondi
     timeline.play();
 }
 
    public void difficolta(){
         adminDB=new AmministratoreJDBC();
         this.difficolta=MainViewController.getDifficolta();
+        this.lingua=MainViewController.getLingua();
         files1=new ArrayList();
         numFileDifficolta=0;
         numFileCorrente.set(0);
@@ -146,8 +149,9 @@ public class LectureViewController implements Initializable {
         bottoneSuccessivo.disableProperty().bind(numFileCorrente.greaterThanOrEqualTo(numFileDifficolta - 1));
        
         
-        List<File> files=adminDB.recuperaFile(this.difficolta);
-        List<String> stopWords=adminDB.recuperaStopWords();
+        List<File> files=adminDB.recuperaFile(this.difficolta,this.lingua);
+        System.out.println(files);
+        List<String> stopWords=adminDB.recuperaStopWords(this.lingua);
         
         int numFile=files.size();
         Random r=new Random();

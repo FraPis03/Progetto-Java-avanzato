@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
@@ -42,7 +43,7 @@ public class AdminController implements Initializable {
     AmministratoreJDBC adminDB;
     
     Amministratore admin;
-
+    
     @FXML
     private Label titoloLabel;
     @FXML
@@ -67,14 +68,22 @@ public class AdminController implements Initializable {
     private Text testoIstruzioni;
     @FXML
     private Button bottoneAggiungiStopword;
-
+    @FXML
+    private ChoiceBox<String> choiceBoxLingua;
+    @FXML
+    private ChoiceBox<String> choiceBoxLinguaStopword;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        u=new UtenteJDBC(); 
-       adminDB=new AmministratoreJDBC(); 
+       adminDB=new AmministratoreJDBC();
+            
+       choiceBoxLingua.getItems().addAll("IT","EN","ESP","FR");
+       choiceBoxLingua.setValue("IT");
+       choiceBoxLinguaStopword.getItems().addAll("IT","EN","ESP","FR");
+       choiceBoxLinguaStopword.setValue("IT");
        
        bottoneSfoglia.setOnAction(e -> {
         apriFileChooser();
@@ -137,16 +146,18 @@ public class AdminController implements Initializable {
     // Mostra la finestra di dialogo per la selezione del file
     File fileSelezionato = fileChooser.showOpenDialog(stage);
     String difficolta=null;
+    String linguaStopWords=choiceBoxLinguaStopword.getValue();
 
     if (fileSelezionato != null) {
-        admin.setStopWords(adminDB.recuperaStopWords());
+        admin.setStopWords(adminDB.recuperaStopWords(linguaStopWords));
         if(admin.checkFile(fileSelezionato)){
             int lunghezzaFile=admin.getLunghezza(fileSelezionato);
             if(lunghezzaFile>150 || lunghezzaFile<450){
                 if(lunghezzaFile>=150 && lunghezzaFile<250) difficolta="Facile";
                 if(lunghezzaFile>=250 && lunghezzaFile<350) difficolta="Medio";
                 if(lunghezzaFile>=350 && lunghezzaFile<450) difficolta="Difficile";
-                if(adminDB.memorizzaFile(admin, fileSelezionato,difficolta)){
+                String lingua=choiceBoxLingua.getValue();
+                if(adminDB.memorizzaFile(admin, fileSelezionato,difficolta,lingua)){
                     admin.addFiles(fileSelezionato);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("File caricato");
@@ -189,12 +200,13 @@ public class AdminController implements Initializable {
     private boolean checkFilesOnUpdate(List<String> stopWordsAgg) {
         List<File> filesErrati=new ArrayList<>();
         Set<String> stopWords=new HashSet<>();
-        stopWords.addAll(adminDB.recuperaStopWords());
+        String linguaStopWords=choiceBoxLinguaStopword.getValue();
+        stopWords.addAll(adminDB.recuperaStopWords(linguaStopWords));
         stopWords.addAll(stopWordsAgg);
         List<String> stop=new ArrayList<>(stopWords);
         admin.setStopWords(stop);
         boolean check=true;
-        for(File f:adminDB.recuperaAllFile()){
+        for(File f:adminDB.recuperaAllFile(linguaStopWords)){
             if(!admin.checkFile(f)){
                 check=false;
                 filesErrati.add(f);
@@ -206,7 +218,8 @@ public class AdminController implements Initializable {
     }
     
     public void inserisciStopWords(List<String> stopWordsList){
-        if(adminDB.updateStopWords(admin,stopWordsList)){
+        String linguaStopWords=choiceBoxLinguaStopword.getValue();
+        if(adminDB.updateStopWords(admin,stopWordsList,linguaStopWords)){
                     areaStopWords.clear();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                      alert.setTitle("StopWords caricate");
