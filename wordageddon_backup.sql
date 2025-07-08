@@ -82,17 +82,17 @@ ALTER TABLE public.utente OWNER TO postgres;
 --
 
 COPY public.amministratorefile (nome, file, difficolta, lingua) FROM stdin;
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/viaggiare.txt	Medio	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/creatività.txt	Medio	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/ironman.txt	Facile	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/universo.txt	Facile	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/moschettieri.txt	Facile	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/cristiano.txt	Facile	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/Manzoni.txt	Medio	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/Annibale.txt	Medio	IT
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/environment_text_2.txt	Facile	EN
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/history_text_3.txt	Facile	EN
-AntonioAdmin	/Users/antoniobellofatto/NetBeansProjects/Wordageddon/testi/technology_text_1.txt	Facile	EN
+AntonioAdmin	viaggiare.txt	Medio	IT
+AntonioAdmin	creatività.txt	Medio	IT
+AntonioAdmin	ironman.txt	Facile	IT
+AntonioAdmin	universo.txt	Facile	IT
+AntonioAdmin	moschettieri.txt	Facile	IT
+AntonioAdmin	cristiano.txt	Facile	IT
+AntonioAdmin	Manzoni.txt	Medio	IT
+AntonioAdmin	Annibale.txt	Medio	IT
+AntonioAdmin	technology_text_1.txt	Facile	EN
+AntonioAdmin	environment_text_2.txt	Facile	EN
+AntonioAdmin	history_text_3.txt	Facile	EN
 \.
 
 
@@ -269,6 +269,9 @@ Antonio	70	2025-06-27 19:39:25.649	Medio	IT
 Antonio	30	2025-06-27 19:40:16.281	Facile	IT
 AntonioAdmin	40	2025-06-29 16:28:02.315	Facile	IT
 Antonio	10	2025-06-29 18:16:10.376	Facile	EN
+Antonio	20	2025-07-08 10:05:46.291	Facile	IT
+AntonioAdmin	0	2025-07-08 10:24:44.119	Facile	IT
+AntonioAdmin	40	2025-07-08 10:25:00.361	Medio	IT
 \.
 
 
