@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -16,15 +17,11 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0"
-                 orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
-      <Button fx:id="bottoneIndietro" layoutX="28.0" layoutY="25.0"
-              mnemonicParsing="false" text="Indietro" />
-      <StackPane fx:id="areaTrascinamento" layoutX="46.0" layoutY="126.0"
-                 prefHeight="150.0" prefWidth="200.0">
+      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0" orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
+      <Button fx:id="bottoneIndietro" layoutX="28.0" layoutY="25.0" mnemonicParsing="false" text="Indietro" />
+      <StackPane fx:id="areaTrascinamento" layoutX="46.0" layoutY="126.0" onDragDropped="#rilascia" onDragOver="#trascina" prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0"
-                  text="+Trascina qui il file" />
+            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0" text="+Trascina qui il file" />
          </children>
       </StackPane>
       <Label fx:id="etichettaUpload" layoutX="88.0" layoutY="85.0" text="Upload file">
@@ -33,8 +30,7 @@
          </font>
       </Label>
       <Label fx:id="etichettaOppure" layoutX="121.0" layoutY="289.0" text="Oppure" />
-      <Button fx:id="bottoneSfoglia" layoutX="60.0" layoutY="342.0"
-              mnemonicParsing="false" text="Sfoglia file..." />
+      <Button fx:id="bottoneSfoglia" layoutX="60.0" layoutY="342.0" mnemonicParsing="false" text="Sfoglia file..." />
       <ChoiceBox fx:id="choiceBoxLingua" layoutX="190.0" layoutY="344.0" prefWidth="60.0" />
       <ChoiceBox fx:id="choiceBoxLinguaStopword" layoutX="320.0" layoutY="352.0" prefWidth="60.0" />
 

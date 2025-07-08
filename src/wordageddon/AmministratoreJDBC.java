@@ -2,6 +2,7 @@ package wordageddon;
 
 
 import java.io.File;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -59,35 +60,45 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 
     //memorizzo sul db il path del file passato dall admin
     @Override
-    public boolean memorizzaFile(Amministratore admin, File f,String difficolta,String lingua) {
-        String query = "INSERT INTO AmministratoreFile (nome, file, difficolta,lingua) VALUES (?, ?, ?,?)";
+public boolean memorizzaFile(Amministratore admin, File f, String difficolta, String lingua) {
+    String query = "INSERT INTO AmministratoreFile (nome, file, difficolta, lingua) VALUES (?, ?, ?, ?)";
 
-        try (
-            Connection con = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stm = con.prepareStatement(query)
-        ) {
-            stm.setString(1, admin.getNomeUtente());
-            stm.setString(2, f.getPath());
-            stm.setString(3, difficolta);
-            stm.setString(4, lingua);
-            
-            int righe = stm.executeUpdate();
-            if (righe == 0) {
-                return false;
-            }
+    try (
+        Connection con = DriverManager.getConnection(URL, USER, PASS);
+        PreparedStatement stm = con.prepareStatement(query)
+    ) {
+        File baseDir = new File("testi").getAbsoluteFile();
+        Path basePath = baseDir.toPath();
+        Path filePath = f.toPath().toAbsolutePath();
 
-        } catch (SQLException ex) {
-            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        Path relativePath = basePath.relativize(filePath);
+        String relativePathStr = relativePath.toString();
+
+
+        stm.setString(1, admin.getNomeUtente());
+        stm.setString(2, relativePathStr);
+        stm.setString(3, difficolta);
+        stm.setString(4, lingua);
+
+        int righe = stm.executeUpdate();
+        if (righe == 0) {
             return false;
         }
-        return true;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+        return false;
     }
+    return true;
+}
+
 
     //recupero i path dei vari file presenti sul db e restituisco una lista di file
     @Override
-public List<File> recuperaFile(String difficolta,String lingua) {
+public List<File> recuperaFile(String difficolta, String lingua) {
 
     List<File> files = new ArrayList<>();
+    File baseDir = new File("testi");  // base relativa al progetto
 
     String query = "SELECT file FROM AmministratoreFile WHERE difficolta=? AND lingua=?";
 
@@ -100,7 +111,9 @@ public List<File> recuperaFile(String difficolta,String lingua) {
 
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
-                files.add(new File(rs.getString("file")));
+                String relativePath = rs.getString("file");
+                File file = new File(baseDir, relativePath);
+                files.add(file);
             }
         }
 

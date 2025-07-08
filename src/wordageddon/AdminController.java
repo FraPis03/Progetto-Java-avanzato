@@ -22,10 +22,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -145,10 +149,50 @@ public class AdminController implements Initializable {
 
     // Mostra la finestra di dialogo per la selezione del file
     File fileSelezionato = fileChooser.showOpenDialog(stage);
-    String difficolta=null;
-    String linguaStopWords=choiceBoxLinguaStopword.getValue();
 
-    if (fileSelezionato != null) {
+    uploadFile(fileSelezionato);
+}
+    private boolean verificaSupportoFile(File file){
+	String fileName = file.getName().toLowerCase();
+	return fileName.endsWith(".txt");
+    }
+    
+    private void fileNonSupportatoAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Il file inserito è di un formato non supportato.\n(Inserire solo file in formato .txt)", ButtonType.OK);
+        alert.setHeaderText(null); 
+        alert.showAndWait(); 
+    }
+    
+    @FXML
+    private void trascina(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        if (db.hasFiles()) {
+           event.acceptTransferModes(TransferMode.COPY);
+        }
+    }
+    
+    @FXML
+    private void rilascia(DragEvent event){
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+            success = true;
+            List<File> files = db.getFiles();
+            File fileSelezionato = files.get(0); 
+            if (!verificaSupportoFile(fileSelezionato)) {///< Verifica che il file sia di un formato accettato.
+                fileNonSupportatoAlert();
+            } else {
+                uploadFile(fileSelezionato);
+            }
+        }
+        event.setDropCompleted(success);
+        event.consume();
+     }
+    
+    private void uploadFile(File fileSelezionato){
+        String difficolta=null;
+        String linguaStopWords=choiceBoxLinguaStopword.getValue();
+        if (fileSelezionato != null) {
         admin.setStopWords(adminDB.recuperaStopWords(linguaStopWords));
         if(admin.checkFile(fileSelezionato)){
             int lunghezzaFile=admin.getLunghezza(fileSelezionato);
