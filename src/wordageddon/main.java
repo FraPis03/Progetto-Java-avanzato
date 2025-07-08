@@ -23,11 +23,26 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
+ * Classe principale per l'avvio dell'applicazione Wordageddon.
+ * 
+ * Questa classe estende {@link javafx.application.Application} e carica la vista iniziale
+ * dell'applicazione (LoginView.fxml), mostrando la schermata di login all'avvio.
  *
+ * L'applicazione è una piattaforma per giochi linguistici, in cui gli utenti possono
+ * registrarsi, accedere e interagire con l'interfaccia grafica creata in JavaFX.
+ * 
  * @author antoniobellofatto
  */
 public class main extends Application {
-    
+
+ /**
+ * Metodo chiamato automaticamente da JavaFX all'avvio dell'applicazione.
+ * 
+ * Carica l'interfaccia grafica dal file FXML `LoginView.fxml` e imposta la scena principale.
+ *
+ * @param primaryStage lo stage principale fornito dal sistema all'avvio dell'app.
+ * @throws IOException se il file FXML non viene trovato o non può essere caricato.
+ */
     @Override
     public void start(Stage primaryStage) throws IOException {
         
@@ -42,9 +57,11 @@ public class main extends Application {
     primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
+ /**
+ * Metodo main standard che avvia l'applicazione JavaFX.
+ *
+ * @param args argomenti da riga di comando (non utilizzati in questa applicazione).
+ */
     public static void main(String[] args) {
         launch(args);
     }
