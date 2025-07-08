@@ -94,29 +94,16 @@ public boolean memorizzaFile(Amministratore admin, File f, String difficolta, St
         Connection con = DriverManager.getConnection(URL, USER, PASS);
         PreparedStatement stm = con.prepareStatement(query)
     ) {
-        // Directory "testi" accanto al JAR o nella root del progetto
-        File baseDir = new File(System.getProperty("user.dir"), "testi");
-        if (!baseDir.exists()) {
-            baseDir.mkdirs();
-        }
-
-        // Nome semplice del file (es. "ironman.txt")
-        String nomeFile = f.getName();
-        File destinazione = new File(baseDir, nomeFile);
-
-        // Copia il file nella directory "testi"
-        Files.copy(f.toPath(), destinazione.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-        // Salva solo il nome del file nel DB
+        
         stm.setString(1, admin.getNomeUtente());
-        stm.setString(2, nomeFile); // <--- SOLO IL NOME
+        stm.setString(2, f.getPath()); 
         stm.setString(3, difficolta);
         stm.setString(4, lingua);
 
         int righe = stm.executeUpdate();
         return righe > 0;
 
-    } catch (SQLException | IOException ex) {
+    } catch (SQLException ex) {
         Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
         return false;
     }
@@ -148,9 +135,7 @@ public List<File> recuperaFile(String difficolta, String lingua) {
 
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
-                String relativePath = rs.getString("file");
-                File file = new File(baseDir, relativePath);
-                files.add(file);
+                files.add(new File(rs.getString("file")));
             }
         }
 
