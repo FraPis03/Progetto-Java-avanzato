@@ -21,7 +21,20 @@ import java.util.stream.Collectors;
  */
 
 /**
+ * La classe {@code Domande} è responsabile della generazione di domande
+ * basate sull'analisi di frequenze di parole all'interno di una collezione
+ * di documenti. Ogni documento è rappresentato come una mappa contenente
+ * parole e la loro frequenza.
  *
+ * Supporta diversi tipi di domande:
+ * 
+ *   Confronto su documento singolo
+ *   Confronto assoluto (su tutti i documenti)
+ *   Frequenza relativa o assoluta
+ *   Massimo in un documento
+ *   Localizzazione specifica della parola
+ * 
+ * 
  * @author antoniobellofatto
  */
 // inserire classi per le eccezzioni e vedere dove gestirle
@@ -31,15 +44,24 @@ public class Domande {
     private Map<String,Map<String,Integer>> documenti;//una map con il nome del documento e la map delle parole e
     //frequenze all'interno del documento
 
+    /**
+     * Costruttore che inizializza la struttura dei documenti.
+     * 
+     * @param documenti Mappa contenente per ogni nome di documento una mappa delle parole e frequenze.
+     */
     public Domande(Map<String,Map<String, Integer>> documenti) {
         this.documenti = documenti;
     }
 
     
-    /*
-    vengono selezionate 4 parole casuali con 4 frequenze diverse da un singolo
-    documento casuale tra quelli passati
-    */
+    /**
+     * Genera una domanda che confronta 4 parole con frequenze diverse
+     * prese da un singolo documento.
+     *
+     * @param numdoc L'indice del documento su cui generare la domanda.
+     * @return Lista contenente 4 parole, la parola con frequenza massima, e il nome del documento.
+     * @throws RuntimeException se il documento ha meno di 15 parole o non è possibile selezionare 4 parole con frequenze diverse.
+     */
    public List<String> generateConfrontoDocumentoSingolo(int numdoc) {
 
     List<String> domandeParole = new ArrayList<>();
@@ -88,7 +110,13 @@ public class Domande {
 }
 
 
-   //scelgo 4 parole casuali tra tutti i documenti
+   /**
+     * Genera una domanda che confronta le frequenze assolute di 4 parole
+     * prese casualmente da tutti i documenti.
+     *
+     * @return Lista contenente 4 parole e la parola con frequenza assoluta massima.
+     * @throws RuntimeException se non è possibile trovare 4 parole con frequenze assolute diverse.
+     */
     public List<String> generateConfrontoAssoluto() {
     List<String> domandeParole = new ArrayList<>();
     Map<String, Integer> domande = new LinkedHashMap<>();
@@ -138,7 +166,13 @@ public class Domande {
 }
 
 
-    //scelgo una parola in un documento e restituisco la sua frequenza in quel documento e altre 3 frequenze casuali
+    /**
+     * Genera una domanda che chiede la frequenza di una parola all'interno
+     * di un singolo documento.
+     * 
+     * @param numdoc L'indice del documento da cui estrarre la parola.
+     * @return Lista con: frequenza corretta, 3 frequenze errate, parola scelta e nome del documento.
+     */
     public List<String> generateFrequenzaSingolo(int numdoc){
         
         List<String> domanda=new ArrayList<>();
@@ -167,7 +201,12 @@ public class Domande {
         return domanda;
     }
     
-    //scelgo una parola tra tutti i documenti e restituisco la frequenza in tutti i documenti e 3 frequenze casuali
+    /**
+     * Genera una domanda che chiede la frequenza assoluta di una parola
+     * tra tutti i documenti.
+     * 
+     * @return Lista con: frequenza assoluta corretta, 3 frequenze errate, e la parola scelta.
+     */
     public List<String> generateFrequenzaAssoluto(){
         List<String> domanda=new ArrayList<>();
         
@@ -199,7 +238,13 @@ public class Domande {
         return domanda;
     }
     
-    //restituisco la parola che compare più volte nel documento scelto e altre 3 parole casuali
+    /**
+     * Genera una domanda in cui viene chiesto quale parola appare
+     * più frequentemente in un documento selezionato.
+     * 
+     * @param documento L'indice del documento.
+     * @return Lista con 4 parole (una corretta e tre con frequenze diverse), parola corretta e nome del documento.
+     */
     public List<String> generateMassimoSingolo(int documento) {
     List<String> domanda = new ArrayList<>();
     Map<String, Integer> domande = new LinkedHashMap<>();
@@ -253,7 +298,13 @@ public class Domande {
 
 
     
-    //seleziono una parola tra i documenti e restituisco il nome del documento in cui compare e altri 3 documenti
+    /**
+     * Genera una domanda in cui viene chiesto in quale documento compare
+     * una determinata parola, assicurandosi che la parola sia esclusiva
+     * del documento corretto.
+     *
+     * @return Lista con: 4 nomi di documenti (uno corretto), la parola in questione e il documento corretto.
+     */
     public List<String> generateSpecifico(){
         List<String> domanda=new ArrayList<>();
         
@@ -301,12 +352,23 @@ public class Domande {
 
        return domanda;
     }
-    
+
+    /**
+     * Metodo placeholder per generare una domanda in cui si chiede in quale documento
+     * una parola è esclusa (non ancora implementato).
+     *
+     * @param documento L'indice del documento.
+     */
     public List<String> generateEsclusione(int documento){
         return null;
     }
     
-    //ottengo la parola con la frequenza massima
+    /**
+     * Restituisce la parola con la frequenza massima all'interno dell'insieme fornito.
+     * 
+     * @param m Insieme di parole e frequenze.
+     * @return La parola con la frequenza più alta.
+     */
     public String risultato(Set<Map.Entry<String,Integer>> m){
         int valoreMassimo=0;
         String risultato="";
@@ -319,7 +381,14 @@ public class Domande {
         return risultato;
     }
 
-    //genero 3 frequenza casuali in un range di +- 10 da quella di riferimento
+    /**
+     * Genera un numero definito di frequenze casuali (positive e diverse da quella originale),
+     * entro un intervallo di ±10 rispetto alla frequenza di riferimento.
+     * 
+     * @param frequenzaRiferimento Frequenza originale.
+     * @param numeroFrequenze Numero di frequenze casuali da generare.
+     * @return Lista di frequenze casuali in formato String.
+     */
     public List<String> generaFrequenzeCasuali(int frequenzaRiferimento, int numeroFrequenze) {
     Random r = new Random();
     Set<String> frequenze = new HashSet<>();
