@@ -24,8 +24,17 @@ import java.util.logging.Logger;
  */
 
 /**
- *
- * @author antoniobellofatto
+ * Implementazione dell'interfaccia {@link AmministratoreDAO} che fornisce metodi per interagire
+ * con il database PostgreSQL, relativi alla gestione delle stopwords e dei file caricati
+ * dagli amministratori.
+ * 
+ * Il database deve contenere le tabelle:
+ * - AmministratoreStopWords(nome TEXT, stopword TEXT, lingua TEXT)
+ * - AmministratoreFile(nome TEXT, file TEXT, difficolta TEXT, lingua TEXT)
+ * 
+ * Connessione effettuata tramite JDBC.
+ * 
+ * Autore: antoniobellofatto
  */
 public class AmministratoreJDBC implements AmministratoreDAO {
 
@@ -34,7 +43,14 @@ public class AmministratoreJDBC implements AmministratoreDAO {
     private final String PASS = "2003";
 
     
-    //aggiungo le stopwords passate in input al db
+    /**
+     * Aggiunge al database una lista di stopword specificando l'amministratore e la lingua.
+     * 
+     * @param admin oggetto {@link Amministratore} che effettua l'inserimento.
+     * @param parole lista di parole da aggiungere come stopword.
+     * @param lingua lingua associata alle stopword.
+     * @return true se tutte le parole sono state inserite correttamente, false altrimenti.
+     */
     @Override
     public boolean updateStopWords(Amministratore admin, List<String> parole, String lingua) {
         String query = "INSERT INTO AmministratoreStopWords (nome, stopword,lingua) VALUES (?, ?,?)";
@@ -61,7 +77,15 @@ public class AmministratoreJDBC implements AmministratoreDAO {
         return true;
     }
 
-    //memorizzo sul db il path del file passato dall admin
+    /**
+     * Salva nel database il percorso relativo di un file caricato dall'amministratore.
+     * 
+     * @param admin oggetto {@link Amministratore} che carica il file.
+     * @param f file da memorizzare.
+     * @param difficolta livello di difficoltà del file.
+     * @param lingua lingua associata al contenuto del file.
+     * @return true se il file è stato salvato correttamente, false altrimenti.
+     */
     @Override
 public boolean memorizzaFile(Amministratore admin, File f, String difficolta, String lingua) {
     String query = "INSERT INTO AmministratoreFile (nome, file, difficolta, lingua) VALUES (?, ?, ?, ?)";
@@ -100,7 +124,13 @@ public boolean memorizzaFile(Amministratore admin, File f, String difficolta, St
 
 
 
-    //recupero i path dei vari file presenti sul db e restituisco una lista di file
+    /**
+     * Recupera una lista di file salvati nel database in base alla difficoltà e lingua.
+     * 
+     * @param difficolta livello di difficoltà dei file richiesti.
+     * @param lingua lingua dei file richiesti.
+     * @return lista di oggetti {@link File} corrispondenti ai risultati della query.
+     */
     @Override
 public List<File> recuperaFile(String difficolta, String lingua) {
 
@@ -133,7 +163,12 @@ public List<File> recuperaFile(String difficolta, String lingua) {
 }
 
 
-    //restituisco tutte le stopwords presenti sul db
+    /**
+     * Recupera tutte le stopword presenti nel database per una determinata lingua.
+     * 
+     * @param lingua lingua per cui recuperare le stopword.
+     * @return lista di stringhe contenente tutte le stopword della lingua indicata.
+     */
     @Override
     public List<String> recuperaStopWords(String lingua) {
     List<String> stopWords = new ArrayList<>();
@@ -161,7 +196,12 @@ public List<File> recuperaFile(String difficolta, String lingua) {
 }
 
 
-    //controllo che non vengano inseriti più volte gli stessi file o file con lo stesso nome
+    /**
+     * Verifica che non esista già nel database un file con lo stesso nome.
+     * 
+     * @param nomeFile nome del file da controllare.
+     * @return true se il nome non è presente nel database (quindi può essere inserito), false altrimenti.
+     */
     @Override
     public boolean checkNomeFile(String nomeFile) {
         boolean check=false;
@@ -186,7 +226,13 @@ public List<File> recuperaFile(String difficolta, String lingua) {
         }
         return check;
     }
-
+     
+     /**
+     * Recupera tutti i file salvati nel database per una determinata lingua.
+     * 
+     * @param lingua lingua per cui recuperare i file.
+     * @return lista di oggetti {@link File}.
+     */
     @Override
     public List<File> recuperaAllFile(String lingua) {
     List<File> files = new ArrayList<>();
