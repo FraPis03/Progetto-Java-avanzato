@@ -2,7 +2,10 @@ package wordageddon;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -67,30 +70,34 @@ public boolean memorizzaFile(Amministratore admin, File f, String difficolta, St
         Connection con = DriverManager.getConnection(URL, USER, PASS);
         PreparedStatement stm = con.prepareStatement(query)
     ) {
-        File baseDir = new File("testi").getAbsoluteFile();
-        Path basePath = baseDir.toPath();
-        Path filePath = f.toPath().toAbsolutePath();
+        // Directory "testi" accanto al JAR o nella root del progetto
+        File baseDir = new File(System.getProperty("user.dir"), "testi");
+        if (!baseDir.exists()) {
+            baseDir.mkdirs();
+        }
 
-        Path relativePath = basePath.relativize(filePath);
-        String relativePathStr = relativePath.toString();
+        // Nome semplice del file (es. "ironman.txt")
+        String nomeFile = f.getName();
+        File destinazione = new File(baseDir, nomeFile);
 
+        // Copia il file nella directory "testi"
+        Files.copy(f.toPath(), destinazione.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
+        // Salva solo il nome del file nel DB
         stm.setString(1, admin.getNomeUtente());
-        stm.setString(2, relativePathStr);
+        stm.setString(2, nomeFile); // <--- SOLO IL NOME
         stm.setString(3, difficolta);
         stm.setString(4, lingua);
 
         int righe = stm.executeUpdate();
-        if (righe == 0) {
-            return false;
-        }
+        return righe > 0;
 
-    } catch (SQLException ex) {
+    } catch (SQLException | IOException ex) {
         Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
         return false;
     }
-    return true;
 }
+
 
 
     //recupero i path dei vari file presenti sul db e restituisco una lista di file
