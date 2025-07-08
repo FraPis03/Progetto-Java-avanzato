@@ -23,8 +23,14 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
+ * Controller della vista principale dell'applicazione Wordageddon.
+ * 
+ * Gestisce:
+ * - La selezione della difficoltà e della lingua.
+ * - L'accesso alla modalità Gioco.
+ * - L'accesso alla Classifica.
+ * - L'accesso alla sezione Admin (se l'utente è amministratore).
+ * 
  * @author antoniobellofatto
  */
 public class MainViewController implements Initializable {
@@ -128,23 +134,48 @@ public class MainViewController implements Initializable {
         });
     }
 
+    /**
+    * Imposta l'utente attualmente loggato e abilita/disabilita il bottone admin.
+    * 
+    * @param u Oggetto Utente da impostare come loggato.
+    */
     public void setUtenteLoggato(Utente u){
         user=u;
         this.setAdminButton();
     }    
-    
+
+    /**
+     * Restituisce l'utente attualmente loggato.
+     * 
+     * @return Oggetto Utente corrente.
+     */
     public static Utente getUtente(){
         return user;
     }
-    
+
+    /**
+    * Restituisce la difficoltà selezionata dall'utente.
+    * 
+    * @return Stringa contenente la difficoltà ("Facile", "Medio", "Difficile").
+    */
     public static String getDifficolta(){
         return difficoltaSelezionata;
     }
-    
+
+    /**
+    * Restituisce la lingua selezionata dall'utente.
+    * 
+    * @return Codice lingua selezionata ("IT", "EN", "ESP", "FR").
+    */
     public static String getLingua(){
         return linguaSelezionata;
     }
-    
+
+    /**
+    * Controlla se l'utente ha ruolo di amministratore.
+    * 
+    * Se non è admin, disabilita il bottone per accedere alla vista Admin.
+    */
     public void setAdminButton(){
         if(!userDB.getRuolo(user.getNomeUtente()).contentEquals("admin")) bottoneAdmin.setDisable(true);
     }
