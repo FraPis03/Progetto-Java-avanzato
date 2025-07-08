@@ -27,8 +27,9 @@ import java.util.stream.Collectors;
  */
 
 /**
- *
- * @author antoniobellofatto
+ * Implementazione dell'interfaccia UtenteDAO tramite JDBC.
+ * Si occupa della gestione del database per operazioni relative agli utenti e ai punteggi.
+ * Utilizza PostgreSQL come sistema di gestione del database.
  */
 public class UtenteJDBC implements UtenteDAO {
 
@@ -36,7 +37,13 @@ public class UtenteJDBC implements UtenteDAO {
     private final String USER = "postgres";
     private final String PASS = "2003";
 
-    //inserisco l utente sul db
+ /**
+ * Inserisce un nuovo utente nel database.
+ *
+ * @param u Oggetto Utente da inserire.
+ * @return true se l'inserimento è avvenuto con successo, false altrimenti.
+ * @throws RuntimeException se si verifica un errore SQL.
+ */
     @Override
     public boolean inserisciUtente(Utente u) {
         String query = "INSERT INTO Utente (nome, password, email, ruolo) VALUES (?, ?, ?, ?)";
@@ -62,7 +69,12 @@ public class UtenteJDBC implements UtenteDAO {
     }
 
     
-    //elimino l utente dal db
+ /**
+ * Elimina un utente dal database sulla base del nome utente.
+ *
+ * @param u Oggetto Utente da eliminare.
+ * @throws RuntimeException se l'utente non viene trovato o in caso di errore SQL.
+ */
     @Override
     public void eliminaUtente(Utente u) {
         String query = "DELETE FROM Utente WHERE nome = ?";
@@ -83,7 +95,15 @@ public class UtenteJDBC implements UtenteDAO {
         }
     }
 
-    //aggiorno il punteggio dell utente sul db
+ /**
+ * Inserisce un nuovo punteggio per l'utente nel database.
+ *
+ * @param u Oggetto Utente per cui aggiornare il punteggio.
+ * @param punteggio Il punteggio ottenuto.
+ * @param difficolta La difficoltà della partita.
+ * @param lingua La lingua utilizzata nella partita.
+ * @throws RuntimeException se si verifica un errore SQL.
+ */
     @Override
     public void aggiornaPunteggio(Utente u, int punteggio,String difficolta,String lingua) {
     String query = "INSERT INTO punteggi (nomeUtente, punteggio, dataOra, difficolta, lingua) VALUES (?, ?, ?, ?, ?)";
@@ -110,7 +130,14 @@ public class UtenteJDBC implements UtenteDAO {
  }
 
 
-    //controllo che le credenziali inserite dall utente all accesso siano valide
+ /**
+ * Verifica se le credenziali (nome e password) dell'utente sono corrette.
+ *
+ * @param nome Il nome utente.
+ * @param password La password da verificare.
+ * @return true se le credenziali corrispondono a un utente nel database, false altrimenti.
+ * @throws RuntimeException se si verifica un errore SQL.
+ */
     @Override
     public boolean checkCredenziali(String nome, String password) {
         boolean check=false;
@@ -137,7 +164,13 @@ public class UtenteJDBC implements UtenteDAO {
         return check;
     }
 
-    //controllo che non vi siano due nomi utenti uguali
+ /**
+ * Verifica se il nome utente è già presente nel database.
+ *
+ * @param nome Il nome utente da verificare.
+ * @return true se il nome utente esiste già, false altrimenti.
+ * @throws RuntimeException in caso di errore SQL.
+ */
     @Override
     public boolean checkNomeUtente(String nome) {
         boolean check=false;
@@ -162,7 +195,15 @@ public class UtenteJDBC implements UtenteDAO {
         return check;
     }
 
-    //restituisco i punteggi dell utente
+ /**
+ * Restituisce la lista dei punteggi ottenuti da un utente, filtrati per difficoltà e lingua.
+ *
+ * @param nomeUtente Il nome dell'utente.
+ * @param difficolta La difficoltà delle partite.
+ * @param lingua La lingua delle partite.
+ * @return Lista di oggetti Punteggi ordinati per data decrescente.
+ * @throws RuntimeException in caso di errore SQL.
+ */
     @Override
     public List<Punteggi> punteggiUtente(String nomeUtente,String difficolta, String lingua) {
         List<Punteggi> punteggi=new ArrayList<>();
@@ -192,7 +233,15 @@ public class UtenteJDBC implements UtenteDAO {
         return punteggi;
     }
 
-    //ottengo il punteggio massimo da tutti gli utenti sul db
+ /**
+ * Restituisce una mappa contenente la somma dei punteggi di tutti gli utenti
+ * per una determinata difficoltà e lingua, ordinata in ordine decrescente di punteggio.
+ *
+ * @param difficolta La difficoltà selezionata.
+ * @param lingua La lingua selezionata.
+ * @return Mappa con il nome utente come chiave e il punteggio totale come valore.
+ * @throws RuntimeException in caso di errore SQL.
+ */
     @Override
 public Map<String, Punteggi> punteggiGlobali(String difficolta,String lingua) {
     Map<String, Punteggi> punteggi = new HashMap<>();
@@ -234,7 +283,13 @@ public Map<String, Punteggi> punteggiGlobali(String difficolta,String lingua) {
 }
 
     
-    //prendo il ruolo a partire dal nome utente
+ /**
+ * Restituisce il ruolo di un utente a partire dal nome.
+ *
+ * @param nome Il nome dell'utente.
+ * @return Il ruolo associato (es. "Utente" o "Amministratore").
+ * @throws RuntimeException in caso di errore SQL.
+ */
     public String getRuolo(String nome){
         String ruolo="Utente";
         
@@ -258,6 +313,16 @@ public Map<String, Punteggi> punteggiGlobali(String difficolta,String lingua) {
         return ruolo;
     }
 
+ /**
+ * Restituisce una lista contenente il punteggio massimo e il punteggio medio dell’utente,
+ * filtrati per difficoltà e lingua.
+ *
+ * @param nomeUtente Il nome dell’utente.
+ * @param difficolta La difficoltà delle partite.
+ * @param lingua La lingua delle partite.
+ * @return Lista di due interi: il primo è il punteggio massimo, il secondo è il punteggio medio.
+ * @throws RuntimeException in caso di errore SQL.
+ */
     @Override
     public List<Integer> statistichePunteggio(String nomeUtente, String difficolta, String lingua) {
         List<Integer> punteggi=new ArrayList<>();
