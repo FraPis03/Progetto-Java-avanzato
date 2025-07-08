@@ -11,7 +11,8 @@
 <AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="600.0" 
             xmlns="http://javafx.com/javafx/8" 
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="wordageddon.ClassificaViewController">
+            fx:controller="wordageddon.ClassificaViewController"
+            stylesheets="/wordageddon/wordageddon_style.css">
    <children>
       <TableView fx:id="classificaTable" layoutX="25.0" layoutY="121.0" prefHeight="248.0" prefWidth="550.0" AnchorPane.leftAnchor="25.0">
         <columns>
