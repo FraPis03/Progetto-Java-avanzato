@@ -12,40 +12,31 @@
             xmlns:fx="http://javafx.com/javafx/1" fx:controller="wordageddon.AdminController"
             stylesheets="/wordageddon/wordageddon_style.css">
    <children>
-      <Label fx:id="titoloLabel" layoutX="177.0" layoutY="14.0" text="Pannello admin">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0" orientation="VERTICAL" prefHeight="335.0" prefWidth="25.0" />
+      <Label fx:id="titoloLabel" layoutX="177.0" layoutY="14.0" text="Pannello admin" styleClass="schede-title"/>
+
+      <Separator fx:id="separatoreCentrale" layoutX="288.0" layoutY="67.0" orientation="VERTICAL" prefHeight="310.0" prefWidth="25.0" />
       <Button fx:id="bottoneIndietro" layoutX="28.0" layoutY="25.0" mnemonicParsing="false" text="Indietro" />
       <StackPane fx:id="areaTrascinamento" layoutX="46.0" layoutY="126.0" onDragDropped="#rilascia" onDragOver="#trascina" prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0" text="+Trascina qui il file" />
+            <Text fx:id="testoTrascina" strokeType="OUTSIDE" strokeWidth="0.0" text="+Trascina qui il file" style="-fx-font-size: 12px; -fx-fill: #007AFF; -fx-font-weight: bold;"/>
          </children>
       </StackPane>
-      <Label fx:id="etichettaUpload" layoutX="88.0" layoutY="85.0" text="Upload file">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="etichettaOppure" layoutX="121.0" layoutY="289.0" text="Oppure" />
-      <Button fx:id="bottoneSfoglia" layoutX="60.0" layoutY="342.0" mnemonicParsing="false" text="Sfoglia file..." />
-      <ChoiceBox fx:id="choiceBoxLingua" layoutX="190.0" layoutY="344.0" prefWidth="60.0" />
-      <ChoiceBox fx:id="choiceBoxLinguaStopword" layoutX="320.0" layoutY="352.0" prefWidth="60.0" />
+      <Label fx:id="etichettaUpload" layoutX="88.0" layoutY="85.0" text="Upload file" styleClass="admin-label"/>
+      <Label fx:id="etichettaOppure" layoutX="121.0" layoutY="289.0" text="Oppure" styleClass="login-label"/>
+      <Button fx:id="bottoneSfoglia" layoutX="60.0" layoutY="345.0" mnemonicParsing="false" text="Sfoglia file..." />
+      <ChoiceBox fx:id="choiceBoxLingua" layoutX="190.0" layoutY="347.5" prefWidth="60.0" />
+      <ChoiceBox fx:id="choiceBoxLinguaStopword" layoutX="320.0" layoutY="347.5" prefWidth="60.0" />
 
-      <Label fx:id="etichettaStopwords" layoutX="392.0" layoutY="85.0" text="StopWords">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
+      <Label fx:id="etichettaStopwords" layoutX="392.0" layoutY="85.0" text="StopWords" styleClass="admin-label"/>
       <TextArea fx:id="areaStopWords" layoutX="330.0" layoutY="176.0"
-                prefHeight="166.0" prefWidth="247.0" wrapText="true"/>
+                prefHeight="166.0" prefWidth="247.0" wrapText="true"                
+                style="-fx-background-color: transparent; -fx-border-color: #007AFF; -fx-border-width: 2px; -fx-border-radius: 5; -fx-background-radius: 15; -fx-padding: 0; -fx-font-size: 14px; -fx-text-fill: #007AFF; -fx-font-weight: bold;"/>
       <Text fx:id="testoIstruzioni" layoutX="352.0" layoutY="142.0"
             strokeType="OUTSIDE" strokeWidth="0.0"
             text="Inserire le parole da bloccare, separate da una virgola"
-            textAlignment="CENTER" wrappingWidth="200.0" />
-      <Button fx:id="bottoneAggiungiStopword" layoutX="430.0" layoutY="350.0"
+            textAlignment="CENTER" wrappingWidth="200.0" 
+            style="-fx-font-size: 12px; -fx-fill: #007AFF; -fx-font-weight: bold;"/>
+      <Button fx:id="bottoneAggiungiStopword" layoutX="410.0" layoutY="345.0"
               mnemonicParsing="false" text="Aggiungi StopWord" />
    </children>
 </AnchorPane>

@@ -5,8 +5,14 @@
 
 /* Stile per il titolo principale "Wordageddon" */
 .main-title {
-    -fx-font-family: "Verdana", sans-serif; /* Un font che si avvicina all'aspetto "forte" */
+    -fx-font-family: "Verdana", sans-serif; 
     -fx-font-size: 48px;
+    -fx-text-fill: #007AFF; 
+    -fx-font-weight: bold;
+}
+
+.schede-title{
+    -fx-font-size: 36px;
     -fx-text-fill: #007AFF; 
     -fx-font-weight: bold;
 }
@@ -14,14 +20,33 @@
 /* Stile per i sottotitoli e etichette importanti */
 .subtitle-label {
     -fx-font-size: 18px;
-    -fx-text-fill: #333333;
+    -fx-text-fill: #007AFF; 
+    -fx-font-weight: bold;
 }
 
+.admin-label{
+    -fx-font-size: 24px;
+    -fx-text-fill: #007AFF; 
+    -fx-font-weight: bold;
+}
+
+.login-label{
+    -fx-font-size: 12px;
+    -fx-text-fill: #007AFF; 
+    -fx-font-weight: bold;
+}
+
+.text.login-label { 
+    -fx-font-size: 12px;
+    -fx-fill: #007AFF !important; 
+    -fx-font-weight: bold;
+}
 /* Stile generale per i bottoni */
 .button {
     -fx-background-color: #007AFF; 
     -fx-text-fill: white;
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-padding: 10px 20px;
     -fx-background-radius: 20; 
     -fx-border-radius: 20;
@@ -30,27 +55,51 @@
 }
 
 .button:hover {
-    -fx-background-color: #0056b3; /* Blu più scuro al passaggio del mouse */
+    -fx-background-color: #0056b3; 
 }
 
 .button:pressed {
-    -fx-background-color: #004085; /* Blu ancora più scuro quando premuto */
+    -fx-background-color: #004085; 
 }
 
+.gioca-button {
+    -fx-background-color: #007AFF;
+    -fx-text-fill: white;
+    -fx-font-size: 36px; 
+    -fx-font-weight: bold;
+    -fx-padding: 15px; 
+    -fx-background-radius: 50%; 
+    -fx-border-radius: 50%; 
+    -fx-min-width: 160px; 
+    -fx-min-height: 160px; 
+    -fx-max-width: 160px; 
+    -fx-max-height: 160px; 
+    -fx-cursor: hand;
+}
+
+.gioca-button:hover {
+    -fx-background-color: #0056b3; 
+}
+
+.gioca-button:pressed {
+    -fx-background-color: #004085; 
+}
 /* Stile per i campi di testo e password */
-.text-field, .password-field, .text-area {
+.text-field, .password-field{
     -fx-background-color: white;
-    -fx-border-color: #007AFF; /* Bordo blu */
+    -fx-border-color: #007AFF; 
     -fx-border-width: 1px;
-    -fx-border-radius: 15; /* Bordi arrotondati */
+    -fx-border-radius: 15; 
     -fx-background-radius: 15;
     -fx-padding: 8px 15px;
     -fx-font-size: 14px;
+    -fx-text-fill: #007AFF;
+    -fx-font-weight: bold;
 }
 
-.text-field:focused, .password-field:focused, .text-area:focused {
-    -fx-border-color: #0056b3; /* Bordo più scuro quando in focus */
-    -fx-border-width: 2px;
+.text-field:focused, .password-field:focused{
+    -fx-border-color: #0056b3; 
+    -fx-border-width: 3px;
 }
 
 /* Stile per i ChoiceBox */
@@ -61,10 +110,48 @@
     -fx-border-radius: 15;
     -fx-background-radius: 15;
     -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-mark-color: #007AFF;
 }
 
 .choice-box .label {
     -fx-text-fill: #007AFF;
+}
+
+.choice-box .context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #007AFF;
+    -fx-border-width: 1px;
+    -fx-border-radius: 15;
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+}
+
+.choice-box .menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #007AFF;
+}
+
+.choice-box .menu-item:hover {
+    -fx-background-color: #007AFF; 
+}
+.choice-box .menu-item:hover .label {
+    -fx-text-fill: white; 
+}
+
+.choice-box .menu-item:focused {
+    -fx-background-color: #007AFF;
+    -fx-font-weight: bold;
+}
+.choice-box .menu-item:focused .label {
+    -fx-text-fill: white;
 }
 
 /* Stile per i separatori */
@@ -95,8 +182,6 @@
 /* Stile per le tabelle */
 .table-view {
     -fx-background-color: white;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 1px;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
@@ -107,17 +192,21 @@
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #007AFF;
     -fx-font-weight: bold;
 }
 
 .table-view .table-cell {
-    -fx-text-fill: #333333;
+    -fx-text-fill: #007AFF;
     -fx-alignment: CENTER; /* Allinea il testo al centro delle celle */
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #b0d8ff; /* Colore selezione riga */
+    -fx-background-color: #007AFF; /* Colore selezione riga */
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: white; /* Il testo all'interno delle celle della riga selezionata diventa bianco */
 }
 
 /* Stile per ScrollPane */
