@@ -25,7 +25,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Controller per la schermata iniziale di Wordageddon.
+ * 
+ * Gestisce la logica di interazione per le operazioni di accesso e registrazione dell’utente.
+ * Fornisce feedback visivo per la validità del nome utente e gestisce la navigazione tra
+ * le varie schermate dell'applicazione.
+ *
+ * Funzionalità principali:
+ * 
+ *   Controllo disponibilità del nome utente durante la registrazione
+ *   Accesso con verifica delle credenziali
+ *   Registrazione con validazione dei dati
+ *   Passaggio alla schermata principale in caso di successo
  *
  * @author Francesco
  */

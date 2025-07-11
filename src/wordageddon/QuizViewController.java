@@ -29,8 +29,16 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
+ * Controller della schermata del quiz. Gestisce la visualizzazione delle domande, 
+ * la raccolta delle risposte dell'utente e il passaggio alla schermata dei risultati.
+ * 
+ * Le domande vengono generate in base alla difficoltà scelta (Facile, Medio, Difficile)
+ * utilizzando i metodi forniti dalla classe {@code Domande}. 
+ * Ogni domanda ha 4 risposte possibili e viene mostrata una alla volta.
+ * 
+ * Le risposte corrette e quelle date dall'utente vengono raccolte e passate alla 
+ * schermata successiva per il calcolo del punteggio.
+ * 
  * @author antoniobellofatto
  */
 public class QuizViewController implements Initializable {
@@ -155,7 +163,11 @@ public class QuizViewController implements Initializable {
         });   
     }    
     
-    
+    /**
+     * Avvia il quiz in base alla difficoltà scelta.
+     * @param d oggetto Domande per generare le domande.
+     * @param difficolta livello di difficoltà: "Facile", "Medio" o "Difficile".
+     */
     public void domande(Domande d,String difficolta){    
         
     this.domande=d;
@@ -182,11 +194,18 @@ public class QuizViewController implements Initializable {
     }
      
 }
-    
+    /**
+     * Aggiorna l'etichetta che mostra il progresso dell'utente nel quiz.
+     * @param domandaCorrente numero della domanda corrente.
+     * @param totaleDomande numero totale di domande.
+     */
     public void aggiornaProgresso(int domandaCorrente, int totaleDomande) {
         labelProgresso.setText(domandaCorrente + "/" + totaleDomande);
     }
-    
+
+    /**
+     * Passa alla schermata dei risultati al termine del quiz.
+     */
     public void vaiAiRisultati(){
         try {
             //Cambio la schermata quando sono finite le domande
@@ -205,7 +224,10 @@ public class QuizViewController implements Initializable {
             ex.printStackTrace();
         }
     }
-    
+
+    /**
+     * Genera le domande di livello Facile.
+     */
     public void generaDomandeFacile(){
             List<String> domanda=domande.generateFrequenzaAssoluto();
             risposteCorrette.add(domanda.get(0));
@@ -252,7 +274,10 @@ public class QuizViewController implements Initializable {
             dom="Quante volte compare la parola "+domanda.get(4) +" nel documento "+domanda.get(5)+" ?";
             this.mischia(domanda, dom);
     }
-    
+
+    /**
+     * Mostra la prima domanda all'utente.
+     */
     public void primaDomanda(){
         this.aggiornaProgresso(domandaCorrente, totaleDomande);
         List<String> domanda=domande.generateConfrontoDocumentoSingolo(0);
@@ -270,7 +295,10 @@ public class QuizViewController implements Initializable {
         btnRisposta3.setText(risposte.get(2));
         btnRisposta4.setText(risposte.get(3)); 
     }
-    
+
+    /**
+     * Genera le domande di livello Medio (include quelle Facili).
+     */
     public void generaDomandeMedio(){
         this.generaDomandeFacile();
         
@@ -301,7 +329,9 @@ public class QuizViewController implements Initializable {
             
     }
     
-    
+    /**
+     * Genera le domande di livello Difficile (include quelle Facili e Medie).
+     */
     //aggiornare correttamente questo metodo
     public void generaDomandeDifficile(){
         this.generaDomandeFacile();
@@ -326,7 +356,12 @@ public class QuizViewController implements Initializable {
 
         
     }
-    
+
+    /**
+     * Aggiunge una nuova domanda mischiando le risposte e salvandole nella lista domandeFatte.
+     * @param domanda lista di risposte generate da {@code Domande}.
+     * @param dom testo della domanda.
+     */
     public void mischia(List<String> domanda,String dom){
         List<String> risposte = new ArrayList<>(domanda.subList(0, 4)); 
             Collections.shuffle(risposte);

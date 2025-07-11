@@ -33,8 +33,17 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
- * FXML Controller class
- *
+ * Controller della vista Classifica del gioco Wordageddon.
+ * Gestisce la visualizzazione delle classifiche punteggi dei giocatori, sia globali che personali,
+ * filtrate per lingua e difficoltà.
+ * 
+ * Permette all'utente di visualizzare:
+ * - la classifica personale ("Singolo") o quella globale ("Globale")
+ * - i punteggi in base alla difficoltà selezionata (Facile, Medio, Difficile)
+ * - i punteggi in base alla lingua della partita (IT, EN, ESP, FR)
+ * 
+ * Inoltre mostra le statistiche personali dell'utente: miglior punteggio e punteggio medio.
+ * 
  * @author antoniobellofatto
  */
 public class ClassificaViewController implements Initializable {
@@ -110,7 +119,13 @@ public class ClassificaViewController implements Initializable {
             }
        });
     }   
-    
+
+    /**
+     * Carica e visualizza la classifica per il singolo utente.
+     * 
+     * @param difficolta difficoltà della partita (Facile, Medio, Difficile)
+     * @param lingua lingua della partita (IT, EN, ESP, FR)
+     */
     public void utenteSingoloClassifica(String difficolta, String lingua){
         this.user=MainViewController.getUtente();
     
@@ -131,7 +146,13 @@ public class ClassificaViewController implements Initializable {
         this.setStatistiche(difficolta,lingua);
 
     }
-    
+
+    /**
+     * Carica e visualizza la classifica globale per tutti gli utenti.
+     * 
+     * @param difficolta difficoltà della partita (Facile, Medio, Difficile)
+     * @param lingua lingua della partita (IT, EN, ESP, FR)
+     */
     public void utenteGlobaleClassifica(String difficolta, String lingua){
         this.user=MainViewController.getUtente();
         
@@ -150,7 +171,10 @@ public class ClassificaViewController implements Initializable {
         classificaTable.setItems(punteggi);
         this.setStatistiche(difficolta,lingua);
     }
-    
+
+    /**
+     * Aggiorna la classifica in base ai valori selezionati nelle choicebox.
+     */
     private void aggiornaClassifica() {
     String tipo = tipoClassificaChoiceBox.getValue();
     String difficolta = difficoltaChoiceBox.getValue();
@@ -164,6 +188,13 @@ public class ClassificaViewController implements Initializable {
         utenteGlobaleClassifica(difficolta,lingua);
     }
 }
+
+    /**
+     * Imposta le etichette delle statistiche personali dell'utente.
+     * 
+     * @param difficolta difficoltà della partita
+     * @param lingua lingua della partita
+     */
     public void setStatistiche(String difficolta,String lingua){
         List<Integer> statistiche=userDB.statistichePunteggio(user.getNomeUtente(), difficolta,lingua);
         labelMigliorPunteggio.setText("Miglior punteggio: "+String.valueOf(statistiche.get(0)));

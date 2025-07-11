@@ -23,8 +23,16 @@ import java.util.stream.Collectors;
  * and open the template in the editor.
  */
 
-/**
- *
+/*
+ * La classe {@code Amministratore} estende {@link Utente} e rappresenta un utente
+ * con privilegi amministrativi in grado di gestire file di testo e stopwords.
+ * 
+ * Le sue funzionalità principali includono:
+ * 
+ *   Verifica dei file in base a criteri di lunghezza e frequenza delle parole
+ *   Gestione di stopwords
+ *   Memorizzazione dei file caricati
+ * 
  * @author antoniobellofatto
  */
 public class Amministratore extends Utente{
@@ -32,30 +40,65 @@ public class Amministratore extends Utente{
     private List<String> stopWords;
     private List<File> files;
 
+    /**
+     * Costruttore della classe {@code Amministratore}.
+     *
+     * @param nomeUtente nome utente dell'amministratore
+     * @param password password dell'amministratore
+     * @param email email dell'amministratore
+     */
     public Amministratore(String nomeUtente, String password, String email) {
         super(nomeUtente, password, email);
         this.stopWords = new ArrayList<>();
         this.files = new ArrayList<>();
     }
 
+    /**
+     * Restituisce la lista di stopwords associate all'amministratore.
+     *
+     * @return lista di stopwords
+     */
     public List<String> getStopWords() {
         return stopWords;
     }
 
+    /**
+     * Restituisce la lista di file caricati dall'amministratore.
+     *
+     * @return lista di file
+     */
     public List<File> getFiles() {
         return files;
     }
-    
+
+    /**
+     * Aggiunge una nuova stopword alla lista, se non è già presente.
+     *
+     * @param parola parola da aggiungere come stopword
+     */
     public void addStopWords(String parola){
         if(!this.stopWords.contains(parola)) this.stopWords.add(parola);
     }
-    
+
+    /**
+     * Aggiunge un file alla lista dei file caricati, se non è già presente.
+     *
+     * @param f file da aggiungere
+     */
     public void addFiles(File f){
         if(!this.files.contains(f)) this.files.add(f);
     }
     
     
-    //controllo sui file affinchè abbiano una certa lunghezza e una certa varietà di parole con diverse frequenze al suo interno
+    /**
+     * Verifica se un file rispetta i vincoli:
+     * 
+     *   Numero di parole diverse compreso tra 51 e 299
+     *   Almeno 4 frequenze diverse 
+     *
+     * @param f file da verificare
+     * @return true se il file è valido, false altrimenti
+     */
     public boolean checkFile(File f){
         
         boolean check=false;
@@ -100,10 +143,21 @@ public class Amministratore extends Utente{
     return check;
     }
 
+    /**
+     * Imposta la lista di stopwords.
+     *
+     * @param stopWords lista di parole da considerare come stopwords
+     */
     public void setStopWords(List<String> stopWords) {
         this.stopWords = stopWords;
     }
 
+    /**
+     * Calcola la lunghezza di un file in termini di numero totale di parole.
+     *
+     * @param f file da analizzare
+     * @return numero di parole nel file
+     */
     public int getLunghezza(File f) {
     int count = 0;
     try (Scanner scanner = new Scanner(f)) {

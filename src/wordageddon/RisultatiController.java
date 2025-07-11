@@ -24,6 +24,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * Controller della schermata dei risultati di gioco.
+ * Mostra il punteggio finale, la tabella con gli errori e permette di tornare al menu principale.
+ * 
+ * Implementa l'interfaccia Initializable per inizializzare i componenti al caricamento.
+ */
 public class RisultatiController implements Initializable {
     
     Utente user;
@@ -80,7 +86,13 @@ public class RisultatiController implements Initializable {
         }
     });
     }    
-    
+
+    /**
+     * Imposta i risultati nella schermata e aggiorna il punteggio nel database.
+     * 
+     * @param risposteUtente Lista delle risposte fornite dall'utente
+     * @param risposteCorrette Lista delle risposte corrette
+     */
     public void setRisultati(List<String> risposteUtente,List<String> risposteCorrette){
     this.user=MainViewController.getUtente();
     ObservableList<ObservableList<String>> dati = FXCollections.observableArrayList();
@@ -98,7 +110,15 @@ public class RisultatiController implements Initializable {
     labelPunteggio.setText("Punteggio: " + punteggio);
     userDB.aggiornaPunteggio(user, punteggio,MainViewController.getDifficolta(),MainViewController.getLingua());
     }
-    
+
+    /**
+     * Calcola il punteggio finale confrontando le risposte dell'utente con quelle corrette.
+     * Ogni risposta corretta vale 10 punti.
+     * 
+     * @param risposteUtente Lista delle risposte fornite dall'utente
+     * @param risposteCorrette Lista delle risposte corrette
+     * @return Punteggio totale calcolato
+     */
     public int calcolaPunteggio(List<String> risposteUtente,List<String> risposteCorrette){
         int punteggio=0;
         for(int i=0;i<risposteUtente.size();i++){

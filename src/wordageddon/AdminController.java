@@ -36,8 +36,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
+ * Controller per l'interfaccia grafica dedicata all'amministratore in Wordageddon.
+ * Gestisce il caricamento dei file, l'aggiunta di stopwords e la configurazione 
+ * della lingua e della difficoltà.
+ * 
+ * L'interfaccia è costruita con JavaFX.
+ * 
  * @author antoniobellofatto
  */
 public class AdminController implements Initializable {
@@ -136,6 +140,10 @@ public class AdminController implements Initializable {
     });
     }
 
+    /**
+    * Apre un file chooser per selezionare manualmente un file di testo (.txt)
+    * e avvia il processo di upload del file selezionato.
+    */
     private void apriFileChooser() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Seleziona un file di testo");
@@ -152,17 +160,33 @@ public class AdminController implements Initializable {
 
     uploadFile(fileSelezionato);
 }
+    /**
+    * Verifica se il file selezionato è supportato (solo formato .txt).
+    * 
+    * @param file File da controllare
+    * @return true se il file è supportato, false altrimenti
+    */
     private boolean verificaSupportoFile(File file){
 	String fileName = file.getName().toLowerCase();
 	return fileName.endsWith(".txt");
     }
-    
+
+    /**
+    * Mostra un alert all'utente indicando che il file selezionato
+    * non è supportato dal sistema.
+    */
     private void fileNonSupportatoAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING, "Il file inserito è di un formato non supportato.\n(Inserire solo file in formato .txt)", ButtonType.OK);
         alert.setHeaderText(null); 
         alert.showAndWait(); 
     }
-    
+
+    /**
+    * Gestisce l'evento di trascinamento di file sull'area di drop.
+    * Accetta solo file.
+    * 
+    * @param event Evento di tipo DragEvent
+    */
     @FXML
     private void trascina(DragEvent event) {
         Dragboard db = event.getDragboard();
@@ -170,7 +194,13 @@ public class AdminController implements Initializable {
            event.acceptTransferModes(TransferMode.COPY);
         }
     }
-    
+
+    /**
+    * Gestisce l'evento di rilascio dei file trascinati. Verifica il tipo di file
+    * e in caso positivo lo passa alla funzione di upload.
+    * 
+    * @param event Evento di tipo DragEvent
+    */
     @FXML
     private void rilascia(DragEvent event){
         Dragboard db = event.getDragboard();
@@ -188,7 +218,16 @@ public class AdminController implements Initializable {
         event.setDropCompleted(success);
         event.consume();
      }
-    
+
+    /**
+    * Esegue l'upload del file nel database se rispetta tutti i vincoli:
+    * - formato valido
+    * - numero parole totali compreso tra 150 e 450
+    * - almeno 50 parole diverse con almeno 4 parole con frequenza > 1
+    * - non già presente nel database
+    * 
+    * @param fileSelezionato Il file selezionato da caricare
+    */
     private void uploadFile(File fileSelezionato){
         String difficolta=null;
         String linguaStopWords=choiceBoxLinguaStopword.getValue();
@@ -236,11 +275,24 @@ public class AdminController implements Initializable {
         }
     }
 }
-    
+
+    /**
+    * Imposta i dati dell’amministratore attualmente loggato a partire da un oggetto Utente.
+    * 
+    * @param u Oggetto Utente da cui costruire l'amministratore
+    */
     public void setAmministratore(Utente u){
         admin=new Amministratore(u.getNomeUtente(),u.getPassword(),u.getEmail());
     }
 
+    /**
+    * Controlla se l'aggiunta di nuove stopwords invalida i file già caricati.
+    * Se anche uno solo dei file non supera più il controllo di validità,
+    * il metodo restituisce false.
+    * 
+    * @param stopWordsAgg Lista di nuove stopwords da aggiungere
+    * @return true se tutti i file restano validi, false altrimenti
+    */
     private boolean checkFilesOnUpdate(List<String> stopWordsAgg) {
         List<File> filesErrati=new ArrayList<>();
         Set<String> stopWords=new HashSet<>();
@@ -260,7 +312,14 @@ public class AdminController implements Initializable {
         
         return check;
     }
-    
+
+    /**
+    * Inserisce una lista di stopwords nel database per la lingua selezionata.
+    * Mostra un alert informativo se l'inserimento è andato a buon fine,
+    * altrimenti segnala l'errore.
+    * 
+    * @param stopWordsList Lista di stopwords da inserire
+    */
     public void inserisciStopWords(List<String> stopWordsList){
         String linguaStopWords=choiceBoxLinguaStopword.getValue();
         if(adminDB.updateStopWords(admin,stopWordsList,linguaStopWords)){

@@ -21,8 +21,14 @@ import javafx.concurrent.Task;
  */
 
 /**
- *
- * @author antoniobellofatto
+ * Classe che rappresenta un servizio JavaFX per analizzare una lista di file testuali,
+ * conteggiando la frequenza delle parole in ciascun file, escludendo le stopword.
+ * 
+ * Ogni file viene processato linea per linea: le parole vengono estratte, convertite
+ * in minuscolo, filtrate per escludere le stopword, quindi conteggiate.
+ * I risultati sono restituiti sotto forma di mappa: nome del file → mappa parola-frequenza.
+ * 
+ * Autore: antoniobellofatto
  */
 //fare controlli sui file per numero di parole escluse le stopword e numero di parole diverse per evitare problemi
 public class Analisi extends Service<Map<String,Map<String, Integer>>> {
@@ -30,7 +36,12 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
     private List<File> files;
     private List<String> stopWords;
 
-    //definisco la lista di file da analizzare e la lista di stopwords da escludere
+    /**
+     * Costruttore della classe {@code Analisi}.
+     * 
+     * @param files lista di file di testo su cui eseguire l'analisi.
+     * @param stopWords lista di stopword da escludere, verranno convertite in minuscolo.
+     */
     public Analisi(List<File> files, List<String> stopWords) {
         this.files = files;
         this.stopWords = stopWords.stream()
@@ -38,7 +49,15 @@ public class Analisi extends Service<Map<String,Map<String, Integer>>> {
                                   .collect(Collectors.toList());
     }
 
-    //metodo per restituire una mappa con nome del file e le frequenze delle parole al suo interno
+    /**
+     * Crea il task che verrà eseguito dal servizio per analizzare i file.
+     * Ogni file viene letto, analizzato e la frequenza delle parole viene conteggiata
+     * in una mappa, escludendo le stopword.
+     * 
+     * @return task che restituisce una mappa dove:
+     *         - la chiave è il nome del file (senza estensione),
+     *         - il valore è una mappa parola → frequenza, ordinata per frequenza decrescente.
+     */
     @Override
     protected Task<Map<String,Map<String, Integer>>> createTask() {
         return new Task<Map<String,Map<String, Integer>>>() {

@@ -36,8 +36,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * FXML Controller class
- *
+ * Controller della vista "LectureView", che consente all'utente di leggere
+ * i documenti selezionati in base alla difficoltà e lingua prima di iniziare il quiz.
+ * 
+ * Carica i file, gestisce la navigazione tra di essi, mostra il contenuto e avvia
+ * un timer che reindirizza alla schermata del quiz una volta scaduto il tempo.
+ * 
+ * Collegato al file FXML {@code LectureView.fxml}.
+ * 
  * @author antoniobellofatto
  */
 public class LectureViewController implements Initializable {
@@ -92,7 +98,10 @@ public class LectureViewController implements Initializable {
             this.aggiornaIndiceDocumento();
         }); 
     }    
-    
+
+    /**
+     * Avvia un timer countdown (5 secondi) alla fine del quale viene caricata la schermata del quiz.
+     */
     private void startCountdownTimer() {
     int[] timeLeft = {5};
     labelTempo.setText("Tempo rimanente: " + timeLeft[0] + "s");
@@ -121,6 +130,11 @@ public class LectureViewController implements Initializable {
     timeline.play();
 }
 
+    /**
+     * Metodo chiamato dall'esterno per inizializzare il controller con
+     * la difficoltà e lingua selezionate, recuperare i documenti e avviare l’analisi.
+     * Lancia un'eccezione se non ci sono abbastanza documenti per la difficoltà scelta.
+     */
    public void difficolta(){
         adminDB=new AmministratoreJDBC();
         this.difficolta=MainViewController.getDifficolta();
@@ -195,7 +209,11 @@ public class LectureViewController implements Initializable {
         
         this.setVisualizazzioneDocumenti();
    }
-   
+
+    /**
+     * Imposta la visualizzazione del documento corrente all'interno della schermata.
+     * Carica il contenuto del file e lo mostra nella TextArea.
+     */
    public void setVisualizazzioneDocumenti(){
        StringBuffer sb=new StringBuffer();
         
@@ -212,11 +230,19 @@ public class LectureViewController implements Initializable {
         testoContenuto.setText(sb.toString());
         this.aggiornaIndiceDocumento();
    }
-   
+
+   /**
+   * Aggiorna l'etichetta dell’indice documento (es. 1/3).
+   */
    public void aggiornaIndiceDocumento(){
        labelIndiceDocumento.setText((numFileCorrente.get()+1)+"/"+numFileDifficolta);
    }
 
+    /**
+     * Restituisce il nome del file attualmente selezionato, senza estensione e in maiuscolo.
+     *
+     * @return Nome del file corrente (senza estensione).
+     */
    public String getNomeFile(){
        String nomeFile = files1.get(numFileCorrente.get()).getName();
        int ultimoPunto = nomeFile.lastIndexOf('.');
