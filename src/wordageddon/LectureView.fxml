@@ -14,32 +14,23 @@
    <children>
       <VBox fx:id="contenitoreVBox" alignment="TOP_CENTER" layoutX="0.0" layoutY="0.0"
             prefHeight="400.0" prefWidth="600.0" spacing="20.0"
-            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <Label fx:id="labelTempo" text="Tempo rimanente:">
-            <font>
-               <Font size="36.0" />
-            </font>
-         </Label>
-         
-         <Label fx:id="labelNomeDocumento" text="Nome Documento" alignment="CENTER">
-            <font>
-               <Font size="24.0" />
-            </font>
-         </Label>
-         
-         <ScrollPane fx:id="scrollPaneTesto" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0">
-            <content>
-               <Text fx:id="testoContenuto" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="540.0" />
-            </content>
+          <Label fx:id="labelTempo" text="Tempo rimanente:" styleClass="time-label" translateY="30.0"> </Label>
+
+         <Label fx:id="labelNomeDocumento" text="Nome Documento" alignment="CENTER" styleClass="main-title"> </Label>
+
+         <ScrollPane fx:id="scrollPaneTesto" maxWidth="550.0" prefHeight="200.0" prefWidth="200.0"
+                     styleClass="scroll-pane"> <content>
+               <Text fx:id="testoContenuto" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="540.0"
+                     styleClass="scroll-pane-text"/> </content>
          </ScrollPane>
-         
+
          <HBox alignment="CENTER" spacing="10.0">
-            <Button fx:id="bottonePrecedente" text="←" />
-            <Label fx:id="labelIndiceDocumento" text="Documento 1 di N" />
-            <Button fx:id="bottoneSuccessivo" text="→" />
+            <Button fx:id="bottonePrecedente" text="←" styleClass="freccia-button"/>
+            <Label fx:id="labelIndiceDocumento" text="Documento 1 di N" styleClass="subtitle-label"/> <Button fx:id="bottoneSuccessivo" text="→" styleClass="freccia-button"/>
          </HBox>
-         
+
       </VBox>
    </children>
 </AnchorPane>

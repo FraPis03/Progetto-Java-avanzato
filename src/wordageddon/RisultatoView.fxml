@@ -10,38 +10,38 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="wordageddon.RisultatiController"
             stylesheets="/wordageddon/wordageddon_style.css">
-   <children>
-      <VBox alignment="TOP_CENTER" layoutX="120.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label fx:id="labelPunteggio" layoutX="120.0" layoutY="14.0" text="Punteggio: 9999!">
-               <font>
-                  <Font size="48.0" />
-               </font>
-            </Label>
-            <Label text="Revisione errori">
-               <font>
-                  <Font size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-            </Label>
-            <TableView fx:id="tableErrori" maxWidth="560.0" prefHeight="200.0" prefWidth="560.0">
-              <columns>
-                <TableColumn fx:id="colDomanda" prefWidth="150.0" text="N. domanda" />
-                <TableColumn fx:id="colRispostaUtente" prefWidth="205.0" text="Risposta inserita" />
-                <TableColumn fx:id="colRispostaCorretta" prefWidth="205.0" text="Risposta corretta" />
-              </columns>
-              <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-              </columnResizePolicy>
-            </TableView>
-            <Button fx:id="btnTornaMenu" mnemonicParsing="false" text="Ritorna al menù">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+    <children>
+        <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label fx:id="labelPunteggio" text="Punteggio: 9999!" styleClass="schede-title">
+                    <VBox.margin>
+                        <Insets top="40.0" bottom="20.0"/> 
+                    </VBox.margin>
+                </Label>
+                <Label text="Revisione errori" styleClass="admin-label">
+                    <VBox.margin>
+                        <Insets bottom="20.0" /> 
+                    </VBox.margin>
+                </Label>
+                <TableView fx:id="tableErrori" maxWidth="560.0" prefHeight="200.0" prefWidth="560.0">
+                    <columns>
+                        <TableColumn fx:id="colDomanda" prefWidth="150.0" text="N. domanda" />
+                        <TableColumn fx:id="colRispostaUtente" prefWidth="205.0" text="Risposta inserita" />
+                        <TableColumn fx:id="colRispostaCorretta" prefWidth="205.0" text="Risposta corretta" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <VBox.margin>
+                        <Insets left="20.0" right="20.0" /> 
+                    </VBox.margin>
+                </TableView>
+                <Button fx:id="btnTornaMenu" mnemonicParsing="false" text="Ritorna al menù" styleClass="button" translateY="-20.0">
+                    <VBox.margin>
+                        <Insets top="30.0" /> 
+                    </VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
