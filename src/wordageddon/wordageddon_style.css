@@ -3,7 +3,6 @@
     -fx-background-color: white; 
 }
 
-/* Stile per il titolo principale "Wordageddon" */
 .main-title {
     -fx-font-family: "Verdana", sans-serif; 
     -fx-font-size: 48px;
@@ -17,7 +16,6 @@
     -fx-font-weight: bold;
 }
 
-/* Stile per i sottotitoli e etichette importanti */
 .subtitle-label {
     -fx-font-size: 18px;
     -fx-text-fill: #007AFF; 
@@ -48,14 +46,12 @@
     -fx-font-weight: bold;
 }
 
-/* Stile per etichette di tempo/info più piccole */
 .time-label {
     -fx-font-size: 20px;
     -fx-text-fill: #007AFF;
     -fx-font-weight: bold;
 }
 
-/* Stile generale per i bottoni */
 .button {
     -fx-background-color: #007AFF; 
     -fx-text-fill: white;
@@ -130,6 +126,7 @@
     -fx-background-color: #E0E0E0; 
     -fx-border-color: #0056b3; 
 } 
+
 /* Stile per i campi di testo e password */
 .text-field, .password-field{
     -fx-background-color: white;
@@ -148,7 +145,6 @@
     -fx-border-width: 3px;
 }
 
-/* Stile per i ChoiceBox */
 .choice-box {
     -fx-background-color: white;
     -fx-border-color: #007AFF;
@@ -200,7 +196,6 @@
     -fx-text-fill: white;
 }
 
-/* Stile per i separatori */
 .separator {
     -fx-background-color: #007AFF;
     -fx-padding: 0;
@@ -212,20 +207,17 @@
     -fx-background-color: transparent;
 }
 
-/* Stile per le etichette di testo più piccole */
 .small-text-label {
     -fx-font-size: 12px;
     -fx-text-fill: #666666;
 }
 
-/* Stile per i titoli delle sezioni */
 .section-title {
     -fx-font-size: 24px;
     -fx-text-fill: #333333;
     -fx-font-weight: bold;
 }
 
-/* Stile per le tabelle */
 .table-view {
     -fx-background-color: white;
     -fx-border-radius: 5;
@@ -244,18 +236,17 @@
 
 .table-view .table-cell {
     -fx-text-fill: #007AFF;
-    -fx-alignment: CENTER; /* Allinea il testo al centro delle celle */
+    -fx-alignment: CENTER;
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #007AFF; /* Colore selezione riga */
+    -fx-background-color: #007AFF;
 }
 
 .table-row-cell:selected .table-cell {
-    -fx-text-fill: white; /* Il testo all'interno delle celle della riga selezionata diventa bianco */
+    -fx-text-fill: white;
 }
 
-/* Stile per ScrollPane */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: #007AFF; 
@@ -288,7 +279,6 @@
     -fx-background-radius: 0;
 }
 
-/* Stile per i testi all'interno di ScrollPane */
 .scroll-pane-text {
     -fx-fill: #007AFF;
     -fx-font-size: 16px;
