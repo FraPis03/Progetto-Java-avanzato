@@ -90,13 +90,33 @@ public class AmministratoreJDBC implements AmministratoreDAO {
 public boolean memorizzaFile(Amministratore admin, File f, String difficolta, String lingua) {
     String query = "INSERT INTO AmministratoreFile (nome, file, difficolta, lingua) VALUES (?, ?, ?, ?)";
 
+    File baseDir = new File("testi");
+    String relativePath;
+
+    try {
+        // Assicura che la directory testi esista
+        if (!baseDir.exists()) {
+            baseDir.mkdirs();
+        }
+
+        // Copia il file nella directory testi mantenendo solo il nome
+        File destFile = new File(baseDir, f.getName());
+        Files.copy(f.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        // Salva solo il path relativo (es: testi/qualcosa.txt)
+        relativePath = "testi/" + f.getName();
+
+    } catch (IOException e) {
+        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, e);
+        return false;
+    }
+
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
         PreparedStatement stm = con.prepareStatement(query)
     ) {
-        
         stm.setString(1, admin.getNomeUtente());
-        stm.setString(2, f.getPath()); 
+        stm.setString(2, relativePath);
         stm.setString(3, difficolta);
         stm.setString(4, lingua);
 
@@ -111,6 +131,7 @@ public boolean memorizzaFile(Amministratore admin, File f, String difficolta, St
 
 
 
+
     /**
      * Recupera una lista di file salvati nel database in base alla difficoltà e lingua.
      * 
@@ -120,22 +141,23 @@ public boolean memorizzaFile(Amministratore admin, File f, String difficolta, St
      */
     @Override
 public List<File> recuperaFile(String difficolta, String lingua) {
-
     List<File> files = new ArrayList<>();
-    File baseDir = new File("testi");  // base relativa al progetto
+    File baseDir = new File("testi");
 
     String query = "SELECT file FROM AmministratoreFile WHERE difficolta=? AND lingua=?";
 
     try (
         Connection con = DriverManager.getConnection(URL, USER, PASS);
-        PreparedStatement stm = con.prepareStatement(query);
+        PreparedStatement stm = con.prepareStatement(query)
     ) {
         stm.setString(1, difficolta);
         stm.setString(2, lingua);
 
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
-                files.add(new File(rs.getString("file")));
+                String relativePath = rs.getString("file");
+                File file = new File(relativePath);
+                files.add(file);
             }
         }
 
@@ -146,6 +168,7 @@ public List<File> recuperaFile(String difficolta, String lingua) {
 
     return files;
 }
+
 
 
     /**
@@ -220,30 +243,31 @@ public List<File> recuperaFile(String difficolta, String lingua) {
      */
     @Override
     public List<File> recuperaAllFile(String lingua) {
-    List<File> files = new ArrayList<>();
-    
-    String query = "SELECT file FROM AmministratoreFile WHERE lingua = ?";
+        List<File> files = new ArrayList<>();
 
-    try (
-        Connection con = DriverManager.getConnection(URL, USER, PASS);
-        PreparedStatement stm = con.prepareStatement(query);
-    ) {
-        stm.setString(1, lingua); // <-- Imposta parametro lingua
-        
-        try (ResultSet rs = stm.executeQuery()) {
-            while (rs.next()) {
-                files.add(new File(rs.getString("file")));
+        String query = "SELECT file FROM AmministratoreFile WHERE lingua = ?";
+
+        try (
+            Connection con = DriverManager.getConnection(URL, USER, PASS);
+            PreparedStatement stm = con.prepareStatement(query)
+        ) {
+            stm.setString(1, lingua);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    String relativePath = rs.getString("file");
+                    File file = new File(relativePath);
+                    files.add(file);
+                }
             }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Errore SQL recupera file", ex);
         }
 
-    } catch (SQLException ex) {
-        Logger.getLogger(AmministratoreJDBC.class.getName()).log(Level.SEVERE, null, ex);
-        throw new RuntimeException("Errore SQL recupera file", ex);
+        return files;
     }
 
-    return files;
-}
 
-
-    
 }
