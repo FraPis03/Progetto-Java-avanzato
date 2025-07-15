@@ -103,7 +103,7 @@ public class LectureViewController implements Initializable {
      * Avvia un timer countdown (60 secondi) alla fine del quale viene caricata la schermata del quiz.
      */
     private void startCountdownTimer() {
-    int[] timeLeft = {60};
+    int[] timeLeft = {5};
     labelTempo.setText("Tempo rimanente: " + timeLeft[0] + "s");
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -126,7 +126,7 @@ public class LectureViewController implements Initializable {
             }
         }
     }));
-    timeline.setCycleCount(60);  // numero di secondi
+    timeline.setCycleCount(5);  // numero di secondi
     timeline.play();
 }
 
